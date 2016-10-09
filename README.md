@@ -17,3 +17,7 @@ an Android app for recording living expense
 * 工具
 	* android studio 2.2
 	* yED Grahp Editor 3.16.1
+
+* 示意图
+
+![diagram](https://github.com/Chorior/livingExpenseRecord/blob/master/image/diagram.png)
