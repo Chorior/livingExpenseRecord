@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">livingExpenseRecord</string>
+    <string name="record_breakfast_hint">Enter a cost for your breakfast.</string>
 </resources>
