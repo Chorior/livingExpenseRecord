@@ -218,5 +218,12 @@ an Android app for recording living expense
 	* 将EditText设为数字框;
 	* 修改mBreakfast类型;
 	* 修改EditText监听方法;
-	* 添加生活费总计数字框;
+	* 添加当日生活费总计TextView;
 	* 添加中晚餐费用数字框;
+
+		![step2](https://github.com/Chorior/livingExpenseRecord/blob/master/image/step2.png)
+
+* step3
+	* 添加日期textView(或者button日期,然后可以根据选择的日期显示那日生活费使用记录);
+	* 添加保存button,使得记录的信息不可更改;
+	* 思考如何保存Record实例,应该有list,vector之类的吧:);	
