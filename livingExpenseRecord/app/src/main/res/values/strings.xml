@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">livingExpenseRecord</string>
     <string name="record_breakfast_hint">Enter a cost for your breakfast.</string>
+    <string name="record_lunch_hint">Enter a cost for your lunch.</string>
+    <string name="record_dinner_hint">Enter a cost for your dinner.</string>
+    <string name="record_breakfast_label">BREAKFAST</string>
+    <string name="record_lunch_label">LUNCH</string>
+    <string name="record_dinner_label">DINNER</string>
 </resources>

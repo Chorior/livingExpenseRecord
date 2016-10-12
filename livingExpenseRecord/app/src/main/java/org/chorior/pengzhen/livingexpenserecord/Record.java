@@ -8,22 +8,53 @@ import java.util.UUID;
 
 public class Record extends Object {
     private UUID mId;
-    private String mBreakfast;
+    private int mBreakfast;
+    private int mLunch;
+    private int mDinner;
+    private int mTotal_today;
+
+    public int getmTotal_today() {
+        return mTotal_today;
+    }
+
+    public void updatemTotal_today() {
+        mTotal_today = mBreakfast + mLunch + mDinner;
+    }
+
+    public double getmLunch() {
+        return mLunch;
+    }
+
+    public void setmLunch(int mLunch) {
+        this.mLunch = mLunch;
+    }
+
+    public int getmDinner() {
+        return mDinner;
+    }
+
+    public void setmDinner(int mDinner) {
+        this.mDinner = mDinner;
+    }
 
     public UUID getmId() {
         return mId;
     }
 
-    public String getmBreakfast() {
+    public int getmBreakfast() {
         return mBreakfast;
     }
 
-    public void setmBreakfast(String mBreakfast) {
+    public void setmBreakfast(int mBreakfast) {
         this.mBreakfast = mBreakfast;
     }
 
     public Record()
     {
         mId = UUID.randomUUID();
+        mBreakfast = 0;
+        mLunch = 0;
+        mDinner = 0;
+        mTotal_today = 0;
     }
 }

@@ -4,10 +4,61 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <EditText
-        android:id="@+id/record_breakfast"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/record_breakfast_label"
+        style="?android:listSeparatorTextViewStyle"
+        />
+    <EditText
+        android:id="@+id/record_breakfast"
+        android:maxLines="1"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/record_breakfast_hint"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/record_lunch_label"
+        style="?android:listSeparatorTextViewStyle"
+        />
+    <EditText
+        android:id="@+id/record_lunch"
+        android:maxLines="1"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="@string/record_lunch_hint"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/record_dinner_label"
+        style="?android:listSeparatorTextViewStyle"
+        />
+    <EditText
+        android:id="@+id/record_dinner"
+        android:maxLines="1"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="@string/record_dinner_hint"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_total_today"
+        android:gravity="end"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        style="?android:listSeparatorTextViewStyle"
         />
 </LinearLayout>
