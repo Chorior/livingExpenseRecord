@@ -4,9 +4,11 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 public class RecordFragment extends Fragment {
     private Record mRecord;
+    private Button mDateButton;
     private EditText mBreakfastField;
     private EditText mLunchField;
     private EditText mDinnerField;
@@ -34,6 +37,10 @@ public class RecordFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_record,parent,false);
+
+        mDateButton = (Button)v.findViewById(R.id.record_date);
+        mDateButton.setText(DateFormat.format("yyyy MMMM dd EEEE",mRecord.getmDate()));
+        mDateButton.setEnabled(false);
 
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
         mTotal_today.setText(str_total_today_prefix + "" +

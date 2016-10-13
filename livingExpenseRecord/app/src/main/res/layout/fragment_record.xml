@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+    <Button
+        android:id="@+id/record_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        style="@style/Base.TextAppearance.AppCompat.Menu"
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +21,7 @@
     <EditText
         android:id="@+id/record_breakfast"
         android:maxLines="1"
+        android:maxLength="8"
         android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +38,7 @@
     <EditText
         android:id="@+id/record_lunch"
         android:maxLines="1"
+        android:maxLength="8"
         android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +55,7 @@
     <EditText
         android:id="@+id/record_dinner"
         android:maxLines="1"
+        android:maxLength="8"
         android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

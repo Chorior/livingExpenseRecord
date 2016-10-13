@@ -1,5 +1,6 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -8,10 +9,19 @@ import java.util.UUID;
 
 public class Record extends Object {
     private UUID mId;
+    private Date mDate;
     private int mBreakfast;
     private int mLunch;
     private int mDinner;
     private int mTotal_today;
+
+    public Date getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(Date mDate) {
+        this.mDate = mDate;
+    }
 
     public int getmTotal_today() {
         return mTotal_today;
@@ -52,6 +62,7 @@ public class Record extends Object {
     public Record()
     {
         mId = UUID.randomUUID();
+        mDate = new Date();
         mBreakfast = 0;
         mLunch = 0;
         mDinner = 0;

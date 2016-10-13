@@ -6,4 +6,5 @@
     <string name="record_breakfast_label">BREAKFAST</string>
     <string name="record_lunch_label">LUNCH</string>
     <string name="record_dinner_label">DINNER</string>
+    <string name="record_date_label">DATE</string>
 </resources>
