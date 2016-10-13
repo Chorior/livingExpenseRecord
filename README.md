@@ -225,5 +225,104 @@ an Android app for recording living expense
 
 * step3
 	* 添加日期textView(或者button日期,然后可以根据选择的日期显示那日生活费使用记录);
-	* 添加保存button,使得记录的信息不可更改;
-	* 思考如何保存Record实例,应该有list,vector之类的吧:);	
+	* 添加滑屏功能,用于下一步显示记录列表;
+	* 结果
+
+		![ui_step3_0](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step3_0.png)
+
+		![ui_step3_1](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step3_1.png)
+
+	* 实现
+		* 首先添加日期button显示当日天气,格式示例为"2016 十月 13 星期四",暂时使其不可用;
+		* 为Record.java添加日期变量,并生成getter and setter;
+
+			```java
+			private Date mDate;
+			public Date getmDate() {
+		        return mDate;
+		    }
+
+		    public void setmDate(Date mDate) {
+		        this.mDate = mDate;
+		    }
+			```
+
+		* 在fragment_record.xml里添加button组件(`record_date_label`为"DATE")
+
+			```xml			
+		    <Button
+		        android:id="@+id/record_date"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp"
+				style="@style/Base.TextAppearance.AppCompat.Menu"
+		        />
+			```
+
+		* 在RecordFragment.java中显示date button
+
+			```java
+			private Button mDateButton;
+			mDateButton = (Button)v.findViewById(R.id.record_date);
+	        mDateButton.setText(DateFormat.format("yyyy MMMM dd EEEE",mRecord.getmDate()));
+	        mDateButton.setEnabled(false);
+			```
+
+		* 要实现滑屏显示功能,首先要构建RecordListFragment
+			* 先添加RecordListFragment类,ListFragment默认生成一个全屏ListView布局,暂时先不重写onCreateView()方法
+
+				```java
+				public class RecordListFragment extends ListFragment {
+				    @Override
+				    public void onCreate(Bundle savedInstanceState) {
+				        super.onCreate(savedInstanceState);
+				    }
+				}
+				```
+
+			* 然后重写RecordActivity.java,由于FragmentPagerAdapter要使用android.support.v4.app.Fragment
+				* 修改RecordFragment.java中android.app.Fragment为android.support.v4.app.Fragment;
+				* 修改RecordListFragment.java中android.app.ListFragment为android.support.v4.app.ListFragment;
+				* 修改RecordActivity.java中
+					* android.app.Activity为android.support.v4.app.FragmentActivity;
+					* android.app.FragmentManager为android.support.v4.app.FragmentManager;
+					* getFragmentManager()为getSupportFragmentManager();
+				* 重写后的RecordActivity.java如下
+
+					```java
+					public class RecordActivity extends FragmentActivity {
+
+					    private ViewPager mViewPager;
+					    private List<Fragment> mFragmentList = new ArrayList<>();;
+
+					    @Override
+					    protected void onCreate(Bundle savedInstanceState) {
+					        super.onCreate(savedInstanceState);
+					        setContentView(R.layout.activity_record);
+
+					        mViewPager = (ViewPager)findViewById(R.id.viewPager);
+					        Fragment fragment0 = new RecordFragment();
+					        Fragment fragment1 = new RecordListFragment();
+					        mFragmentList.add(fragment0);
+					        mFragmentList.add(fragment1);
+
+					        FragmentManager fm = getSupportFragmentManager();
+					        mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
+					            @Override
+					            public Fragment getItem(int position) {
+					                return mFragmentList.get(position);
+					            }
+
+					            @Override
+					            public int getCount() {
+					                return mFragmentList.size();
+					            }
+					        });
+					    }
+					}
+					```
+
+* step4
+	* 实现Record的列表显示fragment;
+	* 点击某一天的实例时,出现那一天的详细记录,并且可以左右滑动显示上一天或下一天的记录;
