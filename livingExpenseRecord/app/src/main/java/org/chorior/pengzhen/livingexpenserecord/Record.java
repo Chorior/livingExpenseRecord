@@ -1,14 +1,14 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.text.format.DateFormat;
+
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by pengzhen on 11/10/16.
  */
 
 public class Record extends Object {
-    private UUID mId;
     private Date mDate;
     private int mBreakfast;
     private int mLunch;
@@ -47,10 +47,6 @@ public class Record extends Object {
         this.mDinner = mDinner;
     }
 
-    public UUID getmId() {
-        return mId;
-    }
-
     public int getmBreakfast() {
         return mBreakfast;
     }
@@ -61,11 +57,15 @@ public class Record extends Object {
 
     public Record()
     {
-        mId = UUID.randomUUID();
         mDate = new Date();
         mBreakfast = 0;
         mLunch = 0;
         mDinner = 0;
         mTotal_today = 0;
+    }
+
+    @Override
+    public String toString() {
+        return DateFormat.format("MMMM dd",mDate).toString();
     }
 }

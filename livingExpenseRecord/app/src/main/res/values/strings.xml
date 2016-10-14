@@ -7,4 +7,6 @@
     <string name="record_lunch_label">LUNCH</string>
     <string name="record_dinner_label">DINNER</string>
     <string name="record_date_label">DATE</string>
+    <string name="record_list_item_totalTodayText">Record totalToday</string>
+    <string name="record_list_item_dateText">Record Date</string>
 </resources>

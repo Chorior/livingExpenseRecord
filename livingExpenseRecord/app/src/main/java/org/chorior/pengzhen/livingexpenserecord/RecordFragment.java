@@ -39,7 +39,7 @@ public class RecordFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_record,parent,false);
 
         mDateButton = (Button)v.findViewById(R.id.record_date);
-        mDateButton.setText(DateFormat.format("yyyy MMMM dd EEEE",mRecord.getmDate()));
+        mDateButton.setText(DateFormat.format("EEEE, MMMM dd",mRecord.getmDate()));
         mDateButton.setEnabled(false);
 
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
