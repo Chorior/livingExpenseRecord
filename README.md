@@ -325,4 +325,219 @@ an Android app for recording living expense
 
 * step4
 	* 实现Record的列表显示fragment;
-	* 点击某一天的实例时,出现那一天的详细记录,并且可以左右滑动显示上一天或下一天的记录;
+	* 列表项需要显示对应的日期和消费金额;
+	* 结果
+
+		![ui_step4_1](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step4_1.png)
+
+	* mvc图
+
+		![mvc_step4](https://github.com/Chorior/livingExpenseRecord/blob/master/image/mvc_step4.png)
+
+	* 采用`ArrayList<E>`保存Record实例,将该数组存储在一个单例里;
+		* 单例是特殊的java类,创建实例时,一个类仅允许创建一个实例;
+		* 应用能够在内存里存在多久,单例就能存在多久;
+	* 首先创建RecordLab.java(发现id没什么软用,删了)
+
+		```java
+		public class RecordLab {
+		    private static RecordLab sRecordLab;
+		    private Context mAppContext;
+		    private ArrayList<Record> mRecords;
+
+		    private RecordLab(Context appContext){
+		        mAppContext = appContext;
+		        mRecords = new ArrayList<Record>();
+
+		        Calendar cal = Calendar.getInstance();
+		        cal.set(Calendar.DAY_OF_MONTH,1);
+
+		        int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		        for(int i = 0; i < days; ++ i,cal.add(Calendar.DATE,1)){
+					Record r = new Record();
+		            r.setmDate(cal.getTime());
+		            r.setmBreakfast(12 + i);
+		            r.updatemTotal_today();
+		            mRecords.add(r);
+		        }
+		    }
+
+		    public static RecordLab get(Context c){
+		        if(null == sRecordLab){
+		            sRecordLab = new RecordLab(c.getApplicationContext());
+		        }
+		        return sRecordLab;
+		    }
+
+		    public ArrayList<Record> getRecords(){
+		        return mRecords;
+		    }
+
+		    public Record getRecord(Date date){
+		        for(Record r : mRecords){
+		            if(r.getmDate().equals(date)){
+		                return r;
+		            }
+		        }
+		        return null;
+		    }
+		}
+		```
+
+	* 修改RecordListFragment.java获取Record列表
+
+		```java
+		public class RecordListFragment extends ListFragment {
+		    private ArrayList<Record> mRecords;
+
+		    @Override
+		    public void onCreate(Bundle savedInstanceState) {
+		        super.onCreate(savedInstanceState);
+		        mRecords = RecordLab.get(getActivity()).getRecords();
+		    }
+		}
+		```
+
+	* 通过RecordListFragment的ListView将Record列表显示出来;
+		* ListView是ViewGroup的子类,每个列表项都是作为ListView的一个View子对象显示的;
+		* 每个Record列表只需要显示对应的日期,View对象是一个简单的TextView;
+		* 当ListView需要显示某个列表项时,它才会去申请一个可用的视图对象;
+		* adapter是一个控制器对象,从模型层获取数据,并将其提供给ListView显示,它有三个作用
+			* 创建必要的视图对象;
+			* 用模型层数据填充视图对象;
+			* 将准备好的视图对象返回给ListView;
+		* 当ListView需要显示视图对象时,会与其adapter展开会话沟通
+			* 首先调用adapter.getCount()询问数组列表对象个数;
+			* 然后调用adapter.getView(int,View,ViewGroup);
+		* RecordListFragment.java
+
+			```java
+			public class RecordListFragment extends ListFragment {
+			    private ArrayList<Record> mRecords;
+
+			    @Override
+			    public void onCreate(Bundle savedInstanceState) {
+			        super.onCreate(savedInstanceState);
+			        mRecords = RecordLab.get(getActivity()).getRecords();
+
+			        ArrayAdapter<Record> adapter =
+			                new ArrayAdapter<Record>(getActivity(),
+			                        android.R.layout.simple_list_item_1,
+			                        mRecords);
+			        setListAdapter(adapter);
+			    }
+			}
+			```
+
+		* 覆盖Record.toString()方法
+
+			```java
+			@Override
+		    public String toString() {
+		        return DateFormat.format("MMMM dd",mDate).toString();
+		    }
+			```
+
+		* 响应列表项点击事件(暂时不进行处理),RecordListFragment.java
+
+			```java
+			@Override
+		    public void onListItemClick(ListView l, View v, int position, long id) {
+		        //Record r = (Record)(getListAdapter()).getItem(position);
+		        //wait to update
+		    }
+			```
+
+		* 定制列表项,显示对应的日期和消费金额
+			* 首先创建列表项视图的XML布局文件;
+				* RelativeLayout子视图相对于根布局及子视图相对于子视图的布置排列,需要使用一些布局参数加以控制;
+				* 我想要消费金额对齐RelativeLayout布局的右手边,日期相对于消费金额左对齐;
+				* list_item_record.XML
+
+					```XML
+					<?xml version="1.0" encoding="utf-8"?>
+					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent">
+
+					    <TextView
+					        android:id="@+id/record_list_item_dateTextView"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:gravity="start"
+					        android:textStyle="bold"
+					        android:paddingLeft="4dp"
+					        android:paddingRight="4dp"
+					        android:text="@string/record_list_item_dateText"
+					        />
+					    <TextView
+					        android:id="@+id/record_list_item_totalTodayTextView"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@id/record_list_item_dateTextView"
+					        android:gravity="end"
+					        android:layout_alignParentRight="true"
+					        android:layout_alignParentEnd="true"
+					        android:paddingLeft="4dp"
+					        android:paddingRight="4dp"
+					        android:text="@string/record_list_item_totalTodayText"
+					        />
+
+					</RelativeLayout>
+					```
+
+			* 修改RecordListFragment.java
+
+				```java
+				public class RecordListFragment extends ListFragment {
+				    private ArrayList<Record> mRecords;
+
+				    private class RecordAdapter extends ArrayAdapter<Record>{
+				        public RecordAdapter(ArrayList<Record> records){
+				            super(getActivity(),0,records);
+				        }
+
+				        @NonNull
+				        @Override
+				        public View getView(int position, View convertView, ViewGroup parent) {
+				            // if we weren't given a view, inflate one
+				            if(null == convertView){
+				                convertView = getActivity().getLayoutInflater()
+				                        .inflate(R.layout.list_item_record, null);
+				            }
+
+				            // configure the view for this record
+				            Record record = getItem(position);
+
+				            TextView dateTextView =
+				                    (TextView)convertView.findViewById(R.id.record_list_item_dateTextView);
+				            dateTextView.setText(DateFormat.format("MMMM dd",record.getmDate()));
+
+				            TextView totalTodayTextView =
+				                    (TextView)convertView.findViewById(R.id.record_list_item_totalTodayTextView);
+				            totalTodayTextView.setText(String.valueOf(record.getmTotal_today()));
+
+				            return convertView;
+				        }
+				    }
+
+				    @Override
+				    public void onCreate(Bundle savedInstanceState) {
+				        super.onCreate(savedInstanceState);
+				        mRecords = RecordLab.get(getActivity()).getRecords();
+
+				        RecordAdapter adapter = new RecordAdapter(mRecords);
+				        setListAdapter(adapter);
+				    }
+
+				    @Override
+				    public void onListItemClick(ListView l, View v, int position, long id) {
+				        //Record r = ((RecordAdapter)getListAdapter()).getItem(position);
+				        //wait to update
+				    }
+				}
+				```
+
+* step5
+	* 响应列表点击事件,显示相应详细记录,不可修改;
+	* 详细记录可左右滑动显示上一天和下一天的详细记录;
