@@ -24,6 +24,7 @@ public class Record extends Object {
     }
 
     public int getmTotal_today() {
+        updatemTotal_today();
         return mTotal_today;
     }
 
@@ -31,7 +32,7 @@ public class Record extends Object {
         mTotal_today = mBreakfast + mLunch + mDinner;
     }
 
-    public double getmLunch() {
+    public int getmLunch() {
         return mLunch;
     }
 

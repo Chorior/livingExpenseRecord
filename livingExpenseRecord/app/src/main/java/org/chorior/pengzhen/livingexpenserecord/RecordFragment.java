@@ -61,7 +61,6 @@ public class RecordFragment extends Fragment {
                     mRecord.setmBreakfast(0);
                 }
 
-                mRecord.updatemTotal_today();
                 mTotal_today.setText(str_total_today_prefix + "" +
                         mRecord.getmTotal_today());
             }
@@ -87,7 +86,6 @@ public class RecordFragment extends Fragment {
                     mRecord.setmLunch(0);
                 }
 
-                mRecord.updatemTotal_today();
                 mTotal_today.setText(str_total_today_prefix + "" +
                         mRecord.getmTotal_today());
 
@@ -114,7 +112,6 @@ public class RecordFragment extends Fragment {
                     mRecord.setmDinner(0);
                 }
 
-                mRecord.updatemTotal_today();
                 mTotal_today.setText(str_total_today_prefix + "" +
                         mRecord.getmTotal_today());
 

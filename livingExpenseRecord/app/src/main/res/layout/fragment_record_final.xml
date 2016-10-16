@@ -5,7 +5,7 @@
     android:orientation="vertical"
     >
     <Button
-        android:id="@+id/record_date"
+        android:id="@+id/record_date_final"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -15,58 +15,70 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="@string/record_breakfast_label"
-        style="?android:listSeparatorTextViewStyle"
         />
-    <EditText
-        android:id="@+id/record_breakfast"
-        android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
+    <TextView
+        android:id="@+id/record_breakfast_final"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/record_breakfast_hint"
+        android:gravity="end"
+        style="?android:listSeparatorTextViewStyle"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="@string/record_lunch_label"
-        style="?android:listSeparatorTextViewStyle"
         />
-    <EditText
-        android:id="@+id/record_lunch"
-        android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
+    <TextView
+        android:id="@+id/record_lunch_final"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/record_lunch_hint"
+        android:gravity="end"
+        style="?android:listSeparatorTextViewStyle"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="@string/record_dinner_label"
-        style="?android:listSeparatorTextViewStyle"
         />
-    <EditText
-        android:id="@+id/record_dinner"
-        android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
+    <TextView
+        android:id="@+id/record_dinner_final"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/record_dinner_hint"
+        android:gravity="end"
+        style="?android:listSeparatorTextViewStyle"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/record_total_today"
+        android:gravity="start"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="@string/record_totalToday_label"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_total_today_final"
         android:gravity="end"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"

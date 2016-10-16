@@ -1,7 +1,7 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -60,7 +60,10 @@ public class RecordListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        //Record r = ((RecordAdapter)getListAdapter()).getItem(position);
-        //wait to update
+        Record record = ((RecordAdapter)getListAdapter()).getItem(position);
+
+        Intent i = new Intent(getActivity(),finalRecordActivity.class);
+        i.putExtra(finalRecordFragment.EXTRA_RECORD_DATE,record.getmDate());
+        startActivity(i);
     }
 }
