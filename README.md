@@ -540,4 +540,261 @@ an Android app for recording living expense
 
 * step5
 	* 响应列表点击事件,显示相应详细记录,不可修改;
-	* 详细记录可左右滑动显示上一天和下一天的详细记录;
+	* 结果
+
+		![ui_step5_2](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step5_2.png)
+
+	* 要实现记录的不可修改,需要修改一下布局,将EditText改为TextView,因为当日的可修改界面还是需要的,所以再做一个activity和fragment;
+		* 首先是`activity_record_final.xml`
+
+			```xml
+			<?xml version="1.0" encoding="utf-8"?>
+			<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:id="@+id/finalFragmentContainer"
+			    >
+			</FrameLayout>
+			```
+
+		* 然后是`fragment_record_final.xml`
+
+			```xml
+			<?xml version="1.0" encoding="utf-8"?>
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:orientation="vertical"
+			    >
+			    <Button
+			        android:id="@+id/record_date"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        style="@style/Base.TextAppearance.AppCompat.Menu"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/record_breakfast_label"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_breakfast"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:layout_gravity="end"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/record_lunch_label"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_lunch"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:layout_gravity="end"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/record_dinner_label"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_dinner"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:layout_gravity="end"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:id="@+id/record_total_today"
+			        android:gravity="end"
+					android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			</LinearLayout>
+			```
+
+		* 接着是finalRecordFragment.java
+
+			```java
+			public class finalRecordFragment extends Fragment {
+			    private Record mRecord;
+			    private Button mDateButton;
+			    private TextView mBreakfast;
+			    private TextView mLunch;
+			    private TextView mDinner;
+			    private TextView mTotal_today;
+			    private final String str_total_today_prefix = "TOTAL ";
+
+			    @Override
+			    public void onCreate(Bundle savedInstanceState)
+			    {
+			        super.onCreate(savedInstanceState);
+			        mRecord = new Record();
+			    }
+
+			    @Override
+			    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+			                             Bundle savedInstanceState)
+			    {
+			        View v = inflater.inflate(R.layout.fragment_record_final,parent,false);
+
+			        mDateButton = (Button)v.findViewById(R.id.record_date_final);
+			        mDateButton.setText(DateFormat.format("EEEE, MMMM dd",mRecord.getmDate()));
+			        mDateButton.setEnabled(false);
+
+			        mBreakfast = (TextView)v.findViewById(R.id.record_breakfast_final);
+			        mBreakfast.setText(String.valueOf(mRecord.getmBreakfast()));
+
+			        mLunch = (TextView)v.findViewById(R.id.record_lunch_final);
+			        mLunch.setText(String.valueOf(mRecord.getmLunch()));
+
+			        mDinner = (TextView)v.findViewById(R.id.record_dinner_final);
+			        mDinner.setText(String.valueOf(mRecord.getmDinner()));
+
+			        mTotal_today = (TextView)v.findViewById(R.id.record_total_today_final);
+			        mTotal_today.setText(str_total_today_prefix + "" +
+			                String.valueOf(mRecord.getmTotal_today()));
+
+			        return v;
+			    }
+			}
+			```
+
+		* 最后是finalRecordActivity.java
+
+			```java
+			public class finalRecordActivity extends FragmentActivity {
+			    @Override
+			    public void onCreate(Bundle savedInstanceState) {
+			        super.onCreate(savedInstanceState);
+			        setContentView(R.layout.activity_record_final);
+			        FragmentManager fm = getSupportFragmentManager();
+			        Fragment fragment = fm.findFragmentById(R.id.finalFragmentContainer);
+
+			        if(null == fragment){
+			            fragment = new finalRecordFragment();
+			            fm.beginTransaction()
+			                    .add(R.id.finalFragmentContainer, fragment)
+			                    .commit();
+			        }
+			    }
+			}
+			```
+
+	* 下面实现从RecordListFragment.java中启动finalRecordActivity,这里一定要注意
+		* 一定要在mainfest.xml里面登记你要启动的activity,默认是不会登记的
+
+			```java
+			@Override
+		    public void onListItemClick(ListView l, View v, int position, long id) {
+		        //Record record = ((RecordAdapter)getListAdapter()).getItem(position);
+		        Intent i = new Intent(getActivity(),finalRecordActivity.class);
+		        startActivity(i);
+		    }
+			```
+
+	* 启动的finalRecordActivity显示的是新new出来的record,这不是我们需要的,我们需要的是点击record的信息;
+		* 方法一: 通过将Record.mdate附加到Intent的extra上,可以告知RecordFragment应该显示的Record;
+			* 缺点: finalRecordFragment不再可复用,finalRecordActivity的Intent也定义了一个extra;
+			* 优点: 快速,简单;
+			* 首先在finalRecordFragment.java中添加extra值
+
+				```java
+				public static final String EXTRA_RECORD_DATE =
+	            	"org.chorior.pengzhen.recordIntent.record_date";
+					@Override
+			    public void onCreate(Bundle savedInstanceState)
+			    {
+			        super.onCreate(savedInstanceState);
+			        Date recordDate = (Date)getActivity().getIntent()
+			                .getSerializableExtra(EXTRA_RECORD_DATE);
+			        mRecord = RecordLab.get(getActivity()).getRecord(recordDate);
+			    }
+				```
+
+			* 然后在RecordListFragment.java中向extra值附加Serializable信息
+
+				```java
+				@Override
+			    public void onListItemClick(ListView l, View v, int position, long id) {
+			        Record record = ((RecordAdapter)getListAdapter()).getItem(position);
+
+			        Intent i = new Intent(getActivity(),finalRecordActivity.class);
+			        i.putExtra(finalRecordFragment.EXTRA_RECORD_DATE,record.getmDate());
+			        startActivity(i);
+			    }
+				```
+
+		* 方法二: 使用arguments bundle
+			* 每个fragment实例都可附带一个Bundle对象,该bundle包含键值对,一个key-value对即是一个argument;
+			* 缺点: 比较复杂;
+			* 优点: 可重复使用,没有限制;
+			* 首先是创建fragment argument的方法
+
+				```java
+				Bundle args = new Bundle();
+				args.putSerializable(EXTRA_MY_OBJECT,myObject);
+				args.putInt(EXTRA_MY_INT,myInt);
+				args.putCharSequence(EXTRA_MY_STRING,myString);
+				```
+
+			* 调用Fragment.setArgument(Bundle)方法附加argument bundle给finalRecordFragment
+
+				```java
+				public static finalRecordFragment newInstance(Date recordDate){
+			        Bundle args = new Bundle();
+			        args.putSerializable(EXTRA_RECORD_DATE,recordDate);
+
+			        finalRecordFragment finalFragment = new finalRecordFragment();
+			        finalFragment.setArguments(args);
+
+			        return finalFragment;
+			    }
+				```
+
+			* 修改finalRecordActivity创建finalRecordFragment的方法
+
+				```java
+				if(null == fragment){
+		            Date recordDate = (Date)getIntent()
+		                    .getSerializableExtra(finalRecordFragment.EXTRA_RECORD_DATE);
+		            fragment = finalRecordFragment.newInstance(recordDate);
+
+		            fm.beginTransaction()
+		                    .add(R.id.finalFragmentContainer, fragment)
+		                    .commit();
+		        }
+				```
+
+			* 修改finalRecordFragment.java
+
+				```java
+				@Override
+			    public void onCreate(Bundle savedInstanceState)
+			    {
+			        super.onCreate(savedInstanceState);
+
+			        Date recordDate = (Date)getArguments().getSerializable(EXTRA_RECORD_DATE);
+			        mRecord = RecordLab.get(getActivity()).getRecord(recordDate);
+			    }
+				```
+
+			* 最后java,RecordListFragment.java中添加Date信息的方法与方法一相同;
+
+* step6
+	* 点击列表项后,可使用ViewPager左右滑动,显示上一天或下一天的记录信息
