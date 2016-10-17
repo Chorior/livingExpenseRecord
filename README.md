@@ -854,4 +854,54 @@ an Android app for recording living expense
 		```
 
 * step7
-	* 删除RecordLab随机生成的Record实例,改为获取用户添加的Record实例;
+	* 为fragment_record添加菜单栏,设置保存按钮;
+	* 删除RecordLab中随机生成的Record实例,改为用户保存的真实Record;
+	* 首先添加菜单栏
+		* 为res添加android resource directory,选择resource type为menu;
+		* 然后在menu目录下新增menu resource file,名称设为fragment_record_menu.xml
+			* 这里要注意的是,使用了Support库,你必须声明自己的XML命名空间,然后使用showAsAction;
+			* 虽然icon和title都被设置了,但是默认会显示图标,除非你设置`always|withText`;
+
+			```xml
+			<?xml version="1.0" encoding="utf-8"?>
+			<menu xmlns:android="http://schemas.android.com/apk/res/android"
+			    xmlns:app="http://schemas.android.com/apk/res-auto">
+			<item
+			    android:id="@+id/menu_item_save_record"
+			    android:icon="@android:drawable/ic_menu_save"
+			    android:title="@string/save_record"
+			    app:showAsAction="ifRoom|withText"
+			    />
+			</menu>
+			```
+
+		* 复制sdk目录下`/platforms/android-24/data/res/drawable-hdpi/ic_menu_save.png`到`app/src/main/res/drawable/ic_menu_save.png`;
+		* 创建选项菜单和响应菜单项选择事件的两个回调方法
+			* `public void onCreateOptionsMenu(Menu menu,MenuInflater inflater)`;
+			* `public boolean onOptionsItemSelected(MenuItem item)`;
+		* 在RecordFragment.java中生成选项菜单;
+
+			```java
+			@Override
+		    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		        super.onCreateOptionsMenu(menu, inflater);
+		        inflater.inflate(R.menu.fragment_record_menu,menu);
+		    }
+			```
+
+		* Fragment的onCreateOptionsMenu方法由FragmentManager负责调用;
+		* 当activity受到该请求时,FragmentManager需要知道其管理的Fragment应接受onCreateOptionsMenu方法的调用指令;
+		* 再次修改RecordFragment.java			
+
+			```java
+			@Override
+		    public void onCreate(Bundle savedInstanceState)
+		    {
+		        super.onCreate(savedInstanceState);
+		        setHasOptionsMenu(true);
+
+		        mRecord = new Record();
+		    }
+			```
+
+		* 发现菜单栏没有显示,正在处理中
