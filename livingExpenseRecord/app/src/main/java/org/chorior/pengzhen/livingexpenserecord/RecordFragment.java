@@ -6,6 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,7 +21,6 @@ import android.widget.TextView;
 
 public class RecordFragment extends Fragment {
     private Record mRecord;
-    private Button mDateButton;
     private EditText mBreakfastField;
     private EditText mLunchField;
     private EditText mDinnerField;
@@ -30,6 +32,9 @@ public class RecordFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
         mRecord = new Record();
+
+        getActivity().setTitle(DateFormat.format("MMMM dd",mRecord.getmDate()));
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -38,90 +43,65 @@ public class RecordFragment extends Fragment {
     {
         View v = inflater.inflate(R.layout.fragment_record,parent,false);
 
-        mDateButton = (Button)v.findViewById(R.id.record_date);
-        mDateButton.setText(DateFormat.format("EEEE, MMMM dd",mRecord.getmDate()));
-        mDateButton.setEnabled(false);
+        mBreakfastField = (EditText)v.findViewById(R.id.record_breakfast);
+        mLunchField = (EditText)v.findViewById(R.id.record_lunch);
+        mDinnerField = (EditText)v.findViewById(R.id.record_dinner);
+
+        for(Record r : RecordLab.get(getActivity()).getRecords()){
+            if(mRecord.getmDate().equals(r.getmDate())){
+                mRecord.setmBreakfast(r.getmBreakfast());
+                mRecord.setmLunch(r.getmLunch());
+                mRecord.setmDinner(r.getmDinner());
+
+                mBreakfastField.setText(String.valueOf(r.getmBreakfast()));
+                mLunchField.setText(String.valueOf(r.getmLunch()));
+                mDinnerField.setText(String.valueOf(r.getmDinner()));
+                break;
+            }
+        }
 
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
         mTotal_today.setText(str_total_today_prefix + "" +
                 mRecord.getmTotal_today());
 
-        mBreakfastField = (EditText)v.findViewById(R.id.record_breakfast);
-        mBreakfastField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // wait to update
-            }
+        return v;
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(0 != s.length()) {
-                    mRecord.setmBreakfast(Integer.parseInt(s.toString()));
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_record_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_item_save_record:
+                if(0 != mBreakfastField.getText().length()) {
+                    mRecord.setmBreakfast(
+                            Integer.parseInt(mBreakfastField.getText().toString()));
                 } else {
                     mRecord.setmBreakfast(0);
                 }
-
-                mTotal_today.setText(str_total_today_prefix + "" +
-                        mRecord.getmTotal_today());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // wait to update
-            }
-        });
-
-        mLunchField = (EditText)v.findViewById(R.id.record_lunch);
-        mLunchField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // wait to update
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(0 != s.length()) {
-                    mRecord.setmLunch(Integer.parseInt(s.toString()));
+                if(0 != mLunchField.getText().length()) {
+                    mRecord.setmLunch(
+                            Integer.parseInt(mLunchField.getText().toString()));
                 } else {
                     mRecord.setmLunch(0);
                 }
-
-                mTotal_today.setText(str_total_today_prefix + "" +
-                        mRecord.getmTotal_today());
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // wait to update
-            }
-        });
-
-        mDinnerField = (EditText)v.findViewById(R.id.record_dinner);
-        mDinnerField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // wait to update
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(0 != s.length()) {
-                    mRecord.setmDinner(Integer.parseInt(s.toString()));
+                if(0 != mDinnerField.getText().length()) {
+                    mRecord.setmDinner(
+                            Integer.parseInt(mDinnerField.getText().toString()));
                 } else {
                     mRecord.setmDinner(0);
                 }
-
                 mTotal_today.setText(str_total_today_prefix + "" +
                         mRecord.getmTotal_today());
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // wait to update
-            }
-        });
-        return v;
+                RecordLab.get(getActivity()).addRecord(mRecord);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -20,17 +20,6 @@ public class RecordLab {
         mAppContext = appContext;
         mRecords = new ArrayList<Record>();
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH,1);
-
-        int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        for(int i = 0; i < days; ++ i,cal.add(Calendar.DATE,1)){
-            Record r = new Record();
-            r.setmDate(cal.getTime());
-            r.setmBreakfast(12 + i);
-            r.updatemTotal_today();
-            mRecords.add(r);
-        }
     }
 
     public static RecordLab get(Context c){
@@ -51,5 +40,20 @@ public class RecordLab {
             }
         }
         return null;
+    }
+
+    public void addRecord(Record record)
+    {
+        for(Record r : mRecords){
+            if(r.getmDate().equals(record.getmDate())) {
+                r.setmBreakfast(record.getmBreakfast());
+                r.setmLunch(record.getmLunch());
+                r.setmDinner(record.getmDinner());
+                r.updatemTotal_today();
+                return;
+            }
+        }
+
+        mRecords.add(record);
     }
 }

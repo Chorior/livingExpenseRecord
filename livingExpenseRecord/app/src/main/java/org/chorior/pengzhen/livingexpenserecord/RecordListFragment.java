@@ -53,6 +53,7 @@ public class RecordListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRecords = RecordLab.get(getActivity()).getRecords();
+        getActivity().setTitle(R.string.record_list_title);
 
         RecordAdapter adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);

@@ -3,14 +3,14 @@ package org.chorior.pengzhen.livingexpenserecord;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordActivity extends FragmentActivity {
+public class RecordActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();;

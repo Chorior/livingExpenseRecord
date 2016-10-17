@@ -10,4 +10,6 @@
     <string name="record_totalToday_label">TOTAL</string>
     <string name="record_list_item_totalTodayText">Record totalToday</string>
     <string name="record_list_item_dateText">Record Date</string>
+    <string name="save_record">Save Record</string>
+    <string name="record_list_title">Records</string>
 </resources>
