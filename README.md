@@ -854,8 +854,14 @@ an Android app for recording living expense
 		```
 
 * step7
-	* 为fragment_record添加菜单栏,设置保存按钮;
+	* 为fragment_record添加菜单栏,设置保存按钮并且删除editText监听事件处理;
 	* 删除RecordLab中随机生成的Record实例,改为用户保存的真实Record;
+	* 结果
+
+		![ui_step7_0](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step7_0.png)
+
+		![ui_step7_1](https://github.com/Chorior/livingExpenseRecord/blob/master/image/ui_step7_1.png)
+
 	* 首先添加菜单栏
 		* 为res添加android resource directory,选择resource type为menu;
 		* 然后在menu目录下新增menu resource file,名称设为fragment_record_menu.xml
@@ -904,4 +910,95 @@ an Android app for recording living expense
 		    }
 			```
 
-		* 发现菜单栏没有显示,正在处理中
+		* 发现菜单栏没有显示,正在处理中;
+		* AppCompatActivity是FragmentActivity的继承类,它包含actionBar的实现,将RecordActivity的超类修改为AppCompatActivity即可显示标题栏;
+	* 接下来响应菜单项选择;
+		* 先为RecordLab添加新增方法,删除原来的自定义Record实例
+
+			```java
+			public void addRecord(Record record)
+		    {
+		        if(0 != mRecords.size() &&
+		                record.getmDate().equals(
+		                        mRecords.get(mRecords.size() - 1).getmDate())){
+		            mRecords.get(mRecords.size() - 1).setmBreakfast(record.getmBreakfast());
+		            mRecords.get(mRecords.size() - 1).setmLunch(record.getmLunch());
+		            mRecords.get(mRecords.size() - 1).setmDinner(record.getmDinner());
+		            mRecords.get(mRecords.size() - 1).updatemTotal_today();
+		        }else{
+		            mRecords.add(record);
+		        }
+		    }
+			```
+
+		* 然后使用onOptionsItemSelected方法响应菜单项选择事件(RecordFragment.java)
+
+			```java
+			@Override
+		    public boolean onOptionsItemSelected(MenuItem item) {
+		        switch(item.getItemId()){
+		            case R.id.menu_item_save_record:
+		                if(0 != mBreakfastField.getText().length()) {
+		                    mRecord.setmBreakfast(
+		                            Integer.parseInt(mBreakfastField.getText().toString()));
+		                } else {
+		                    mRecord.setmBreakfast(0);
+		                }
+		                if(0 != mLunchField.getText().length()) {
+		                    mRecord.setmLunch(
+		                            Integer.parseInt(mLunchField.getText().toString()));
+		                } else {
+		                    mRecord.setmLunch(0);
+		                }
+		                if(0 != mDinnerField.getText().length()) {
+		                    mRecord.setmDinner(
+		                            Integer.parseInt(mDinnerField.getText().toString()));
+		                } else {
+		                    mRecord.setmDinner(0);
+		                }
+		                mTotal_today.setText(str_total_today_prefix + "" +
+		                        mRecord.getmTotal_today());
+
+		                RecordLab.get(getActivity()).addRecord(mRecord);
+		                return true;
+		            default:
+		                return super.onOptionsItemSelected(item);
+		        }
+		    }
+			```
+
+	* 最后为不同的fragment显示不同的title(RecordActivity.java);
+
+		```java
+		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch(position){
+                    case 0:
+                        Date date = new Date();
+                        setTitle(DateFormat.format("yyyy-MM-dd",date));
+                        break;
+                    case 1:
+                        setTitle(R.string.record_list_title);
+                        break;
+                    default:
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+		```
+
+* step8
+	* 删除finalRecordFragment视图的Date按钮,因为它实在是太丑了,换为显示在标题栏上;
+	* 为finalRecordActivity添加标题栏向上导航菜单;
+	* 设置滑动显示列表项详细记录时,标题栏日期跟随变换;
+	* 为空list视图设置空视图;
