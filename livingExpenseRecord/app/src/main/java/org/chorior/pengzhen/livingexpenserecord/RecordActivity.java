@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecordActivity extends AppCompatActivity {
@@ -36,6 +38,32 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return mFragmentList.size();
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch(position){
+                    case 0:
+                        Date date = new Date();
+                        setTitle(DateFormat.format("yyyy-MM-dd",date));
+                        break;
+                    case 1:
+                        setTitle(R.string.record_list_title);
+                        break;
+                    default:
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }

@@ -39,7 +39,7 @@ public class RecordListFragment extends ListFragment {
 
             TextView dateTextView =
                     (TextView)convertView.findViewById(R.id.record_list_item_dateTextView);
-            dateTextView.setText(DateFormat.format("MMMM dd",record.getmDate()));
+            dateTextView.setText(DateFormat.format("yyyy-MM-dd",record.getmDate()));
 
             TextView totalTodayTextView =
                     (TextView)convertView.findViewById(R.id.record_list_item_totalTodayTextView);
@@ -53,7 +53,6 @@ public class RecordListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRecords = RecordLab.get(getActivity()).getRecords();
-        getActivity().setTitle(R.string.record_list_title);
 
         RecordAdapter adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);

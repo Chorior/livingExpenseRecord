@@ -104,4 +104,8 @@ public class RecordFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public Record getRecord(){
+        return mRecord;
+    }
 }

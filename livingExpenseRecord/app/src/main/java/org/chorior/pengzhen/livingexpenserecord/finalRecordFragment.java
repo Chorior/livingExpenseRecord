@@ -42,7 +42,7 @@ public class finalRecordFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_record_final,parent,false);
 
         mDateButton = (Button)v.findViewById(R.id.record_date_final);
-        mDateButton.setText(DateFormat.format("EEEE, MMMM dd",mRecord.getmDate()));
+        mDateButton.setText(DateFormat.format("yyyy-MM-dd",mRecord.getmDate()));
         mDateButton.setEnabled(false);
 
         mBreakfast = (TextView)v.findViewById(R.id.record_breakfast_final);
