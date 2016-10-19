@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Date;
+
 /**
  * Created by pengzhen on 11/10/16.
  */
@@ -33,7 +35,6 @@ public class RecordFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mRecord = new Record();
 
-        getActivity().setTitle(DateFormat.format("MMMM dd",mRecord.getmDate()));
         setHasOptionsMenu(true);
     }
 
@@ -77,6 +78,9 @@ public class RecordFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_item_save_record:
+
+                mRecord.setmDate(new Date());
+
                 if(0 != mBreakfastField.getText().length()) {
                     mRecord.setmBreakfast(
                             Integer.parseInt(mBreakfastField.getText().toString()));
@@ -103,9 +107,5 @@ public class RecordFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public Record getRecord(){
-        return mRecord;
     }
 }

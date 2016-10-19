@@ -44,15 +44,17 @@ public class RecordLab {
 
     public void addRecord(Record record)
     {
-        if(0 != mRecords.size() &&
-                record.getmDate().equals(
-                        mRecords.get(mRecords.size() - 1).getmDate())){
-            mRecords.get(mRecords.size() - 1).setmBreakfast(record.getmBreakfast());
-            mRecords.get(mRecords.size() - 1).setmLunch(record.getmLunch());
-            mRecords.get(mRecords.size() - 1).setmDinner(record.getmDinner());
-            mRecords.get(mRecords.size() - 1).updatemTotal_today();
-        }else{
-            mRecords.add(record);
+        if(0 != mRecords.size()){
+            for(int i = mRecords.size() - 1; i >= 0; -- i){
+                if(mRecords.get(i).getmDate().equals(record.getmDate())){
+                    mRecords.get(i).setmBreakfast(record.getmBreakfast());
+                    mRecords.get(i).setmLunch(record.getmLunch());
+                    mRecords.get(i).setmDinner(record.getmDinner());
+                    return;
+                }
+            }
         }
+
+        mRecords.add(record);
     }
 }

@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 
 public class RecordListFragment extends ListFragment {
     private ArrayList<Record> mRecords;
+    private RecordAdapter adapter;
 
     private class RecordAdapter extends ArrayAdapter<Record>{
         public RecordAdapter(ArrayList<Record> records){
@@ -52,10 +55,11 @@ public class RecordListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRecords = RecordLab.get(getActivity()).getRecords();
 
-        RecordAdapter adapter = new RecordAdapter(mRecords);
+        mRecords = RecordLab.get(getActivity()).getRecords();
+        adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);
+
     }
 
     @Override
@@ -66,4 +70,33 @@ public class RecordListFragment extends ListFragment {
         i.putExtra(finalRecordFragment.EXTRA_RECORD_DATE,record.getmDate());
         startActivity(i);
     }
+
+    private TextView noItems(String text) {
+        TextView emptyView = new TextView(getActivity());
+        //Make sure you import android.widget.LinearLayout.LayoutParams;
+        emptyView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        emptyView.setText(text);
+        emptyView.setTextSize(12);
+        emptyView.setVisibility(View.GONE);
+        emptyView.setGravity(Gravity.CENTER_VERTICAL
+                | Gravity.CENTER_HORIZONTAL);
+
+        //Add the view to the list view. This might be what you are missing
+        ((ViewGroup) getListView().getParent()).addView(emptyView);
+
+        return emptyView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getListView().setEmptyView(
+                noItems(getResources().getString(R.string.empty_text)));
+    }
+
+    public void refreshData(){
+        adapter.notifyDataSetChanged();
+    }
+
 }

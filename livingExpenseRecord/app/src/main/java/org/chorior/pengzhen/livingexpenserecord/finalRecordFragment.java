@@ -1,9 +1,14 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,7 +25,6 @@ public class finalRecordFragment extends Fragment {
             "org.chorior.pengzhen.recordIntent.record_date";
 
     private Record mRecord;
-    private Button mDateButton;
     private TextView mBreakfast;
     private TextView mLunch;
     private TextView mDinner;
@@ -33,17 +37,16 @@ public class finalRecordFragment extends Fragment {
 
         Date recordDate = (Date)getArguments().getSerializable(EXTRA_RECORD_DATE);
         mRecord = RecordLab.get(getActivity()).getRecord(recordDate);
+
     }
 
+    @TargetApi(11)
+    @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent,
                              Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_record_final,parent,false);
-
-        mDateButton = (Button)v.findViewById(R.id.record_date_final);
-        mDateButton.setText(DateFormat.format("yyyy-MM-dd",mRecord.getmDate()));
-        mDateButton.setEnabled(false);
 
         mBreakfast = (TextView)v.findViewById(R.id.record_breakfast_final);
         mBreakfast.setText(String.valueOf(mRecord.getmBreakfast()));

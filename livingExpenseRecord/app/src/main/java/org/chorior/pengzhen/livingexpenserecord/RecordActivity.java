@@ -15,6 +15,8 @@ import java.util.List;
 public class RecordActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
+    private RecordFragment mRecord_fragment;
+    private RecordListFragment mRecordListFragment;
     private List<Fragment> mFragmentList = new ArrayList<>();;
 
     @Override
@@ -22,9 +24,15 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+        Date date = new Date();
+        setTitle(DateFormat.format("yyyy-MM-dd",date));
+
+        mRecord_fragment = new RecordFragment();
+        mRecordListFragment = new RecordListFragment();
+
         mViewPager = (ViewPager)findViewById(R.id.viewPager);
-        Fragment fragment0 = new RecordFragment();
-        Fragment fragment1 = new RecordListFragment();
+        Fragment fragment0 = mRecord_fragment;
+        Fragment fragment1 = mRecordListFragment;
         mFragmentList.add(fragment0);
         mFragmentList.add(fragment1);
 
@@ -56,6 +64,7 @@ public class RecordActivity extends AppCompatActivity {
                         break;
                     case 1:
                         setTitle(R.string.record_list_title);
+                        mRecordListFragment.refreshData();
                         break;
                     default:
                 }
@@ -66,5 +75,12 @@ public class RecordActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Date date = new Date();
+        setTitle(DateFormat.format("yyyy-MM-dd",date));
     }
 }

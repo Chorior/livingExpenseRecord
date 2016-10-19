@@ -1,12 +1,16 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +19,7 @@ import java.util.Date;
  * Created by pengzhen on 15/10/16.
  */
 
-public class finalRecordActivity extends FragmentActivity {
+public class finalRecordActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ArrayList<Record> mRecords;
 
@@ -24,6 +28,12 @@ public class finalRecordActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_final);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            if(null != NavUtils.getParentActivityName(this)){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
 
         mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
         mRecords = RecordLab.get(this).getRecords();
@@ -48,8 +58,42 @@ public class finalRecordActivity extends FragmentActivity {
         for(int i = 0; i < mRecords.size(); ++ i){
             if(mRecords.get(i).getmDate().equals(recordDate)){
                 mViewPager.setCurrentItem(i);
+                setTitle(DateFormat.format("yyyy-MM-dd",recordDate));
                 break;
             }
+        }
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(null != mRecords){
+                    setTitle(DateFormat.format("yyyy-MM-dd",
+                            mRecords.get(position).getmDate()));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                if(null != NavUtils.getParentActivityName(this)){
+                    NavUtils.navigateUpFromSameTask(this);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
