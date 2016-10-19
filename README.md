@@ -918,16 +918,18 @@ an Android app for recording living expense
 			```java
 			public void addRecord(Record record)
 		    {
-		        if(0 != mRecords.size() &&
-		                record.getmDate().equals(
-		                        mRecords.get(mRecords.size() - 1).getmDate())){
-		            mRecords.get(mRecords.size() - 1).setmBreakfast(record.getmBreakfast());
-		            mRecords.get(mRecords.size() - 1).setmLunch(record.getmLunch());
-		            mRecords.get(mRecords.size() - 1).setmDinner(record.getmDinner());
-		            mRecords.get(mRecords.size() - 1).updatemTotal_today();
-		        }else{
-		            mRecords.add(record);
+				if(0 != mRecords.size()){
+		            for(int i = mRecords.size() - 1; i >= 0; -- i){
+		                if(mRecords.get(i).getmDate().equals(record.getmDate())){
+		                    mRecords.get(i).setmBreakfast(record.getmBreakfast());
+		                    mRecords.get(i).setmLunch(record.getmLunch());
+		                    mRecords.get(i).setmDinner(record.getmDinner());
+		                    return;
+		                }
+		            }
 		        }
+
+		        mRecords.add(record);
 		    }
 			```
 
@@ -938,6 +940,9 @@ an Android app for recording living expense
 		    public boolean onOptionsItemSelected(MenuItem item) {
 		        switch(item.getItemId()){
 		            case R.id.menu_item_save_record:
+
+						mRecord.setmDate(new Date());
+
 		                if(0 != mBreakfastField.getText().length()) {
 		                    mRecord.setmBreakfast(
 		                            Integer.parseInt(mBreakfastField.getText().toString()));
@@ -997,8 +1002,140 @@ an Android app for recording living expense
         });
 		```
 
+	* 测试发现保存菜单按下后listFragment数据没有立即刷新,所以在RecordActivity中onPageSelected方法里添加滑动更新
+
+		```java
+		public void refreshData(){
+	        adapter.notifyDataSetChanged();
+	    }
+		```
+
+		```java
+		case 1:
+            setTitle(R.string.record_list_title);
+            mRecordListFragment.refreshData();
+            break;
+		```
+
 * step8
 	* 删除finalRecordFragment视图的Date按钮,因为它实在是太丑了,换为显示在标题栏上;
-	* 为finalRecordActivity添加标题栏向上导航菜单;
 	* 设置滑动显示列表项详细记录时,标题栏日期跟随变换;
+	* 为finalRecordActivity添加标题栏向上导航菜单;
 	* 为空list视图设置空视图;
+	* 删除finalRecordFragment视图的Date按钮,标题栏日期滑动变换
+		* 首先将finalRecordActivity的超类替换为AppCompatActivity;
+		* 接着删除fragment_record_final的button组件和finalRecordFragment的mDateButton;
+		* 然后在finalRecordActivity中重写addOnPageChangeListener方法
+
+			```java
+			mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+	            @Override
+	            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	            }
+
+	            @Override
+	            public void onPageSelected(int position) {
+	                setTitle(DateFormat.format("yyyy-MM-dd",
+	                            mRecords.get(position).getmDate()));
+	            }
+
+	            @Override
+	            public void onPageScrollStateChanged(int state) {
+
+	            }
+	        });
+			```
+
+		* 最后在RecordListFragment的onCreate方法中添加
+
+		 	```java
+			getActivity().setTitle(DateFormat.format("yyyy-MM-dd",mRecord.getmDate()));
+			```
+
+	* 为finalRecordActivity添加标题栏向上导航菜单
+		* 首先在onCreate方法中启用向上导航图标(只有当api >= 11且activity有父activity才能启用)
+
+			```java
+			View v = inflater.inflate(R.layout.fragment_record_final,parent,false);
+
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+	            if(null != NavUtils.getParentActivityName(getActivity())){
+	                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	            }
+	        }
+			```
+
+		* 响应向上按钮(finalRecordActivity.java)
+			* 首先在onCreate方法中添加`setHasOptionsMenu(true);`
+			* 然后利用NavUtils与mainfest实现层级式导航
+				* 修改AndroidMainfest.xml
+					* 为mainActivity添加launchMode属性为singleTop;
+					* 为finalRecordActivity声明添加新的meta-data属性,指定父类为RecordActivity
+
+						```xml
+						<activity
+				            android:name=".RecordActivity"
+				            android:label="@string/app_name"
+				            android:launchMode="singleTop">
+				            <intent-filter>
+				                <action android:name="android.intent.action.MAIN" />
+
+				                <category android:name="android.intent.category.LAUNCHER" />
+				            </intent-filter>
+				        </activity>
+				        <activity
+				            android:name=".finalRecordActivity">
+				            <meta-data
+				                android:name="android.support.PARENT_ACTIVITY"
+				                android:value=".RecordActivity"/>
+				        </activity>
+						```
+				* 重写onOptionsItemSelected方法
+
+				```java
+				@Override
+			    public boolean onOptionsItemSelected(MenuItem item) {
+			        switch(item.getItemId()){
+			            case android.R.id.home:
+			                if(null != NavUtils.getParentActivityName(this)){
+			                    NavUtils.navigateUpFromSameTask(this);
+			                }
+			                return true;
+			            default:
+			                return super.onOptionsItemSelected(item);
+			        }
+			    }
+				```
+
+	* 为空list视图设置空视图
+
+		```java
+		private TextView noItems(String text) {
+	        TextView emptyView = new TextView(getActivity());
+	        //Make sure you import android.widget.LinearLayout.LayoutParams;
+	        emptyView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+	                LinearLayout.LayoutParams.MATCH_PARENT));
+	        emptyView.setText(text);
+	        emptyView.setTextSize(12);
+	        emptyView.setVisibility(View.GONE);
+	        emptyView.setGravity(Gravity.CENTER_VERTICAL
+	                | Gravity.CENTER_HORIZONTAL);
+
+	        //Add the view to the list view. This might be what you are missing
+	        ((ViewGroup) getListView().getParent()).addView(emptyView);
+
+	        return emptyView;
+	    }
+
+	    @Override
+	    public void onStart() {
+	        super.onStart();
+	        getListView().setEmptyView(
+	                noItems(getResources().getString(R.string.empty_text)));
+	    }
+		```
+
+* step9
+	* 发现一个bug: 当修改系统时间时,记录标题时间没有更改,保存记录后,原记录会被覆盖;
+	* 将Record数据存储在本地,打开应用时,加载这些数据;
