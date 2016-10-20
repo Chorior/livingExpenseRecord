@@ -1047,10 +1047,18 @@ an Android app for recording living expense
 	        });
 			```
 
-		* 最后在RecordListFragment的onCreate方法中添加
+		* 最后在finalRecordActivity的onCreate方法中添加
 
 		 	```java
-			getActivity().setTitle(DateFormat.format("yyyy-MM-dd",mRecord.getmDate()));
+			Date recordDate = (Date)getIntent()
+                .getSerializableExtra(finalRecordFragment.EXTRA_RECORD_DATE);
+	        for(int i = 0; i < mRecords.size(); ++ i){
+	            if(mRecords.get(i).getmDate().equals(recordDate)){
+	                mViewPager.setCurrentItem(i);
+	                setTitle(DateFormat.format("yyyy-MM-dd",recordDate));
+	                break;
+	            }
+	        }
 			```
 
 	* 为finalRecordActivity添加标题栏向上导航菜单
@@ -1138,4 +1146,274 @@ an Android app for recording living expense
 
 * step9
 	* 发现一个bug: 当修改系统时间时,记录标题时间没有更改,保存记录后,原记录会被覆盖;
-	* 将Record数据存储在本地,打开应用时,加载这些数据;
+	* 给RecordActivity的ViewPager添加显示存储列表中最后三月的消费记录;
+	* bug修复
+		* `ArrayList<E>`存储的是对象的引用,所以修改原来添加的对象,会使存储的对象也发生改变,所以添加对象改为临时对象即可;
+		* Date里面居然有具体时间!修改RecordLab的addRecord方法
+
+			```java
+			public void addRecord(Record record)
+		    {
+		        if(!mRecords.isEmpty()) {
+		            for(int i = mRecords.size() - 1; i >= 0; -- i){
+		                if(mRecords.get(i).toString().equals(record.toString())){
+		                    mRecords.remove(i);
+		                    break;
+		                }
+		            }
+		        }
+
+		        mRecords.add(new Record(record));
+		        Collections.sort(mRecords,Record.DateComparator);
+		    }
+			```
+
+	* 添加显示存储列表中最后三月的消费记录
+		* 首先在RecordLab中添加updateRecords方法
+
+			```java
+			// only record the past 3 months and this month's cost at most
+			private void updateRecords(){
+		        if(!mRecords.isEmpty()){
+
+		            Collections.sort(mRecords,Record.DateComparator);
+		            for(int i = 0; i < total_month.length; ++ i){
+		                total_month[i] = 0;
+		                record_months[i] = (new Record()).getYearAndMonthDate();
+		            }
+
+		            int index_totalMonth = 3;
+		            String str_temp = mRecords.get(mRecords.size() - 1).toString();
+		            for(int i = mRecords.size() - 1; i >= 0; -- i){
+		                if(!str_temp.equals(mRecords.get(i).toString())){
+		                    -- index_totalMonth;
+		                    str_temp = mRecords.get(i).toString();
+		                    if(0 > index_totalMonth){
+		                        mRecords.subList(0,i).clear();
+		                        break;
+		                    }
+		                }
+		                total_month[index_totalMonth] += mRecords.get(i).getmTotal_today();
+		                record_months[index_totalMonth] = mRecords.get(i).getYearAndMonthDate();
+		            }
+		        }
+		    }
+			```
+
+		* 将这个方法在addRecord最后调用
+
+			```java
+			public void addRecord(Record record)
+		    {
+		        ...
+
+		        mRecords.add(new Record(record));
+		        updateRecords();
+		    }
+			```
+
+		* 添加fragment_total_month.xml视图
+
+			```xml
+			<?xml version="1.0" encoding="utf-8"?>
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:orientation="vertical"
+			    >
+			    <TextView
+			        android:id="@+id/record_total_month0"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:gravity="start"
+			        android:textStyle="bold"
+			        android:paddingLeft="16dp"
+			        android:paddingRight="16dp"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month0_value"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:gravity="end"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month1"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:gravity="start"
+			        android:textStyle="bold"
+			        android:paddingLeft="16dp"
+			        android:paddingRight="16dp"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month1_value"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:gravity="end"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month2"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:gravity="start"
+			        android:textStyle="bold"
+			        android:paddingLeft="16dp"
+			        android:paddingRight="16dp"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month2_value"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:gravity="end"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month3"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:gravity="start"
+			        android:textStyle="bold"
+			        android:paddingLeft="16dp"
+			        android:paddingRight="16dp"
+			        />
+			    <TextView
+			        android:id="@+id/record_total_month3_value"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="16dp"
+			        android:layout_marginRight="16dp"
+			        android:gravity="end"
+			        style="?android:listSeparatorTextViewStyle"
+			        />
+			</LinearLayout>
+			```
+
+		* 添加fragment_total_month.java
+
+			```java
+			public class fragment_total_month extends Fragment {
+			    private TextView record_month3;
+			    private TextView record_month2;
+			    private TextView record_month1;
+			    private TextView record_month0;
+
+			    private TextView record_month3_value;
+			    private TextView record_month2_value;
+			    private TextView record_month1_value;
+			    private TextView record_month0_value;
+
+			    @Nullable
+			    @Override
+			    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+			                             Bundle savedInstanceState)
+			    {
+			        View v = inflater.inflate(R.layout.fragment_total_month,parent,false);
+			        record_month3 = (TextView)v.findViewById(R.id.record_month3);
+			        record_month2 = (TextView)v.findViewById(R.id.record_month2);
+			        record_month1 = (TextView)v.findViewById(R.id.record_month1);
+			        record_month0 = (TextView)v.findViewById(R.id.record_month0);
+
+			        record_month3_value = (TextView)v.findViewById(R.id.record_month3_value);
+			        record_month2_value = (TextView)v.findViewById(R.id.record_month2_value);
+			        record_month1_value = (TextView)v.findViewById(R.id.record_month1_value);
+			        record_month0_value = (TextView)v.findViewById(R.id.record_month0_value);
+
+			        updateTextView();
+
+			        return v;
+			    }
+
+				public void updateTextView(){
+			        if(null != record_month3){
+			            if((RecordLab.get(getActivity()).getRecord_Months())[3].equals("")){
+			                Calendar cal = Calendar.getInstance();
+			                cal.add(Calendar.MONTH,-3);
+
+			                record_month3.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+			            }else{
+			                record_month3.setText((RecordLab.get(getActivity()).getRecord_Months())[3]);
+			            }
+			        }
+			        if(null != record_month2){
+			            if((RecordLab.get(getActivity()).getRecord_Months())[2].equals("")){
+			                Calendar cal = Calendar.getInstance();
+			                cal.add(Calendar.MONTH,-2);
+
+			                record_month2.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+			            }else{
+			                record_month2.setText((RecordLab.get(getActivity()).getRecord_Months())[2]);
+			            }
+			        }
+			        if(null != record_month1){
+			            if((RecordLab.get(getActivity()).getRecord_Months())[1].equals("")){
+			                Calendar cal = Calendar.getInstance();
+			                cal.add(Calendar.MONTH,-1);
+
+			                record_month1.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+			            }else{
+			                record_month1.setText((RecordLab.get(getActivity()).getRecord_Months())[1]);
+			            }
+			        }
+			        if(null != record_month0){
+			            if((RecordLab.get(getActivity()).getRecord_Months())[0].equals("")){
+			                Calendar cal = Calendar.getInstance();
+
+			                record_month0.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+			            }else{
+			                record_month0.setText((RecordLab.get(getActivity()).getRecord_Months())[0]);
+			            }
+			        }
+
+			        if(null != record_month3_value){
+			            record_month3_value.setText((RecordLab.get(getActivity()).getTotal_month())[3]);
+			        }
+			        if(null != record_month2_value){
+			            record_month2_value.setText((RecordLab.get(getActivity()).getTotal_month())[2]);
+			        }
+			        if(null != record_month1_value){
+			            record_month1_value.setText((RecordLab.get(getActivity()).getTotal_month())[1]);
+			        }
+			        if(null != record_month0_value){
+			            record_month0_value.setText((RecordLab.get(getActivity()).getTotal_month())[0]);
+			        }
+			    }
+
+				@Override
+			    public void onStart() {
+			        super.onStart();
+			        getActivity().setTitle(R.string.total_month_title);
+			    }
+			}
+			```
+
+		* 在RecordActivity的ViewPager中添加这个Fragment
+
+			```java
+			...
+			Fragment fragment0 = mRecord_fragment;
+	        Fragment fragment1 = mRecordListFragment;
+	        Fragment fragment2 = mFragment_total_month;
+
+	        mFragmentList.add(fragment0);
+	        mFragmentList.add(fragment1);
+	        mFragmentList.add(fragment2);
+			...
+			case 2:
+                setTitle(R.string.total_month_title);
+                mFragment_total_month.updateTextView();
+                break;
+            default:
+			...
+			```
+
+* step10
+	* 发现bug: 当滑动到列表时,程序崩溃;
+	* 本地存储数据,开启时,读取数据;
