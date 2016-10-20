@@ -2,6 +2,7 @@ package org.chorior.pengzhen.livingexpenserecord;
 
 import android.text.format.DateFormat;
 
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -56,8 +57,7 @@ public class Record extends Object {
         this.mBreakfast = mBreakfast;
     }
 
-    public Record()
-    {
+    public Record() {
         mDate = new Date();
         mBreakfast = 0;
         mLunch = 0;
@@ -65,8 +65,28 @@ public class Record extends Object {
         mTotal_today = 0;
     }
 
+    public Record(Record record){
+        mDate = record.getmDate();
+        mBreakfast = record.getmBreakfast();
+        mLunch = record.getmLunch();
+        mDinner = record.getmDinner();
+        mTotal_today = record.getmTotal_today();
+    }
+
     @Override
     public String toString() {
-        return DateFormat.format("MMMM dd",mDate).toString();
+        return DateFormat.format("yyyyMMdd",mDate).toString();
     }
+
+    public String getYearAndMonthDate(){
+        return DateFormat.format("yyyy-MM",mDate).toString();
+    }
+
+    public static Comparator<Record> DateComparator
+            = new Comparator<Record>() {
+        @Override
+        public int compare(Record o1, Record o2) {
+            return o1.mDate.compareTo(o2.mDate);
+        }
+    };
 }

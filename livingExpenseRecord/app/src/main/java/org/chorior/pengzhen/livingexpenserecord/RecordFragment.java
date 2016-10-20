@@ -48,19 +48,6 @@ public class RecordFragment extends Fragment {
         mLunchField = (EditText)v.findViewById(R.id.record_lunch);
         mDinnerField = (EditText)v.findViewById(R.id.record_dinner);
 
-        for(Record r : RecordLab.get(getActivity()).getRecords()){
-            if(mRecord.getmDate().equals(r.getmDate())){
-                mRecord.setmBreakfast(r.getmBreakfast());
-                mRecord.setmLunch(r.getmLunch());
-                mRecord.setmDinner(r.getmDinner());
-
-                mBreakfastField.setText(String.valueOf(r.getmBreakfast()));
-                mLunchField.setText(String.valueOf(r.getmLunch()));
-                mDinnerField.setText(String.valueOf(r.getmDinner()));
-                break;
-            }
-        }
-
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
         mTotal_today.setText(str_total_today_prefix + "" +
                 mRecord.getmTotal_today());
@@ -107,5 +94,56 @@ public class RecordFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void updateRecordFragmentView(){
+        if(0 != RecordLab.get(getActivity()).getRecords().size()){
+            boolean isFound = false;
+            for(Record r : RecordLab.get(getActivity()).getRecords()){
+                Record record = new Record();
+                if(record.toString().equals(r.toString())){
+                    if(0 != r.getmBreakfast()){
+                        if(null != mBreakfastField){
+                            mBreakfastField.setText(String.valueOf(r.getmBreakfast()));
+                        }
+                    }
+                    if(0 != r.getmLunch()){
+                        if(null != mLunchField){
+                            mLunchField.setText(String.valueOf(r.getmLunch()));
+                        }
+                    }
+                    if(0 != r.getmDinner()) {
+                        if(null != mDinnerField){
+                            mDinnerField.setText(String.valueOf(r.getmDinner()));
+                        }
+                    }
+
+                    isFound = true;
+                    break;
+                }
+            }
+
+            if(!isFound){
+                if(null != mBreakfastField){
+                    mBreakfastField.setText("");
+                }
+                if(null != mLunchField){
+                    mLunchField.setText("");
+                }
+                if(null != mDinnerField){
+                    mDinnerField.setText("");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Date date = new Date();
+        getActivity().setTitle(DateFormat.format("yyyy-MM-dd",date));
+
+        updateRecordFragmentView();
     }
 }

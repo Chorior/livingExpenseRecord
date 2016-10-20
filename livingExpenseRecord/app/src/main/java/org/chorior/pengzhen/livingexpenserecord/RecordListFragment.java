@@ -91,6 +91,7 @@ public class RecordListFragment extends ListFragment {
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().setTitle(R.string.record_list_title);
         getListView().setEmptyView(
                 noItems(getResources().getString(R.string.empty_text)));
     }

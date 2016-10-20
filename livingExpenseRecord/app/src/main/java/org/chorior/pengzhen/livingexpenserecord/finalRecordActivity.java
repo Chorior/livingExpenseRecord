@@ -1,5 +1,6 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ public class finalRecordActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ArrayList<Record> mRecords;
 
+    @TargetApi(11)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
