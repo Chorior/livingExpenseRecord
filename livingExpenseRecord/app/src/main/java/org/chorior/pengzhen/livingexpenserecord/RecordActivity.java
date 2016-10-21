@@ -90,4 +90,10 @@ public class RecordActivity extends AppCompatActivity {
         super.onResume();
         mViewPager.setCurrentItem(0);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        RecordLab.get(getApplicationContext()).saveRecords();
+    }
 }

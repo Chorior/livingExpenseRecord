@@ -20,15 +20,33 @@ public class RecordLab {
     private int[] total_month;
     private String[] record_months;
 
+    private static final String FILENAME = "records.json";
+    private RecordJSONSerializer mSerializer;
+
     private RecordLab(Context appContext){
         mAppContext = appContext;
-        mRecords = new ArrayList<Record>();
         total_month = new int[4];
         record_months = new String[4];
+        mSerializer = new RecordJSONSerializer(mAppContext,FILENAME);
+        try{
+            mRecords = mSerializer.loadRecords();
+        }catch(Exception e){
+            mRecords = new ArrayList<Record>();
+        }
 
         for(int i = 0; i < total_month.length; ++ i){
             total_month[i] = 0;
             record_months[i] = "";
+        }
+        updateRecords();
+    }
+
+    public boolean saveRecords(){
+        try{
+            mSerializer.saveRecords(mRecords);
+            return true;
+        }catch(Exception e){
+            return false;
         }
     }
 
