@@ -138,12 +138,10 @@ public class RecordFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public void onResume() {
+        super.onResume();
         Date date = new Date();
         getActivity().setTitle(DateFormat.format("yyyy-MM-dd",date));
-
         updateRecordFragmentView();
     }
 }

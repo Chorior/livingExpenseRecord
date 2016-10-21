@@ -25,9 +25,6 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
-        Date date = new Date();
-        setTitle(DateFormat.format("yyyy-MM-dd",date));
-
         mRecord_fragment = new RecordFragment();
         mRecordListFragment = new RecordListFragment();
         mFragment_total_month = new fragment_total_month();
@@ -42,6 +39,7 @@ public class RecordActivity extends AppCompatActivity {
         mFragmentList.add(fragment2);
 
         FragmentManager fm = getSupportFragmentManager();
+        mViewPager.setOffscreenPageLimit(mFragmentList.size());
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
@@ -85,5 +83,11 @@ public class RecordActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewPager.setCurrentItem(0);
     }
 }

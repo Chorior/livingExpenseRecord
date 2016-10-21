@@ -14,7 +14,7 @@
         android:paddingRight="16dp"
         />
     <TextView
-        android:id="@+id/record_month0_value"
+        android:id="@+id/record_month0_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -32,7 +32,7 @@
         android:paddingRight="16dp"
         />
     <TextView
-        android:id="@+id/record_month1_value"
+        android:id="@+id/record_month1_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -50,7 +50,7 @@
         android:paddingRight="16dp"
         />
     <TextView
-        android:id="@+id/record_month2_value"
+        android:id="@+id/record_month2_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -68,7 +68,7 @@
         android:paddingRight="16dp"
         />
     <TextView
-        android:id="@+id/record_month3_value"
+        android:id="@+id/record_month3_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

@@ -75,7 +75,7 @@ public class Record extends Object {
 
     @Override
     public String toString() {
-        return DateFormat.format("yyyyMMdd",mDate).toString();
+        return DateFormat.format("yyyy-MM-dd",mDate).toString();
     }
 
     public String getYearAndMonthDate(){

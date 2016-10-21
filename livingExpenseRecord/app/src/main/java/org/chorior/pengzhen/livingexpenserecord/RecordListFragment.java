@@ -59,7 +59,6 @@ public class RecordListFragment extends ListFragment {
         mRecords = RecordLab.get(getActivity()).getRecords();
         adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);
-
     }
 
     @Override
@@ -91,13 +90,14 @@ public class RecordListFragment extends ListFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().setTitle(R.string.record_list_title);
         getListView().setEmptyView(
                 noItems(getResources().getString(R.string.empty_text)));
     }
 
     public void refreshData(){
-        adapter.notifyDataSetChanged();
+        if(null != adapter){
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }
