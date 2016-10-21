@@ -1174,22 +1174,22 @@ an Android app for recording living expense
 			```java
 			// only record the past 3 months and this month's cost at most
 			private void updateRecords(){
-		        if(!mRecords.isEmpty()){
+				if(!mRecords.isEmpty()){
 
 		            Collections.sort(mRecords,Record.DateComparator);
 		            for(int i = 0; i < total_month.length; ++ i){
 		                total_month[i] = 0;
-		                record_months[i] = (new Record()).getYearAndMonthDate();
+		                record_months[i] = "";
 		            }
 
 		            int index_totalMonth = 3;
-		            String str_temp = mRecords.get(mRecords.size() - 1).toString();
+		            String str_temp = mRecords.get(mRecords.size() - 1).getYearAndMonthDate();
 		            for(int i = mRecords.size() - 1; i >= 0; -- i){
-		                if(!str_temp.equals(mRecords.get(i).toString())){
+		                if(!str_temp.equals(mRecords.get(i).getYearAndMonthDate())){
 		                    -- index_totalMonth;
-		                    str_temp = mRecords.get(i).toString();
+		                    str_temp = mRecords.get(i).getYearAndMonthDate();
 		                    if(0 > index_totalMonth){
-		                        mRecords.subList(0,i).clear();
+		                        mRecords.subList(0,i + 1).clear();
 		                        break;
 		                    }
 		                }
@@ -1222,7 +1222,7 @@ an Android app for recording living expense
 			    android:orientation="vertical"
 			    >
 			    <TextView
-			        android:id="@+id/record_total_month0"
+			        android:id="@+id/record_month0"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:gravity="start"
@@ -1231,7 +1231,7 @@ an Android app for recording living expense
 			        android:paddingRight="16dp"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month0_value"
+			        android:id="@+id/record_month0_total"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="16dp"
@@ -1240,7 +1240,7 @@ an Android app for recording living expense
 			        style="?android:listSeparatorTextViewStyle"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month1"
+			        android:id="@+id/record_month1"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:gravity="start"
@@ -1249,7 +1249,7 @@ an Android app for recording living expense
 			        android:paddingRight="16dp"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month1_value"
+			        android:id="@+id/record_month1_total"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="16dp"
@@ -1258,7 +1258,7 @@ an Android app for recording living expense
 			        style="?android:listSeparatorTextViewStyle"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month2"
+			        android:id="@+id/record_month2"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:gravity="start"
@@ -1267,7 +1267,7 @@ an Android app for recording living expense
 			        android:paddingRight="16dp"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month2_value"
+			        android:id="@+id/record_month2_total"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="16dp"
@@ -1276,7 +1276,7 @@ an Android app for recording living expense
 			        style="?android:listSeparatorTextViewStyle"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month3"
+			        android:id="@+id/record_month3"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:gravity="start"
@@ -1285,7 +1285,7 @@ an Android app for recording living expense
 			        android:paddingRight="16dp"
 			        />
 			    <TextView
-			        android:id="@+id/record_total_month3_value"
+			        android:id="@+id/record_month3_total"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="16dp"
@@ -1293,6 +1293,7 @@ an Android app for recording living expense
 			        android:gravity="end"
 			        style="?android:listSeparatorTextViewStyle"
 			        />
+
 			</LinearLayout>
 			```
 
@@ -1305,10 +1306,10 @@ an Android app for recording living expense
 			    private TextView record_month1;
 			    private TextView record_month0;
 
-			    private TextView record_month3_value;
-			    private TextView record_month2_value;
-			    private TextView record_month1_value;
-			    private TextView record_month0_value;
+			    private TextView record_month3_total;
+			    private TextView record_month2_total;
+			    private TextView record_month1_total;
+			    private TextView record_month0_total;
 
 			    @Nullable
 			    @Override
@@ -1321,75 +1322,77 @@ an Android app for recording living expense
 			        record_month1 = (TextView)v.findViewById(R.id.record_month1);
 			        record_month0 = (TextView)v.findViewById(R.id.record_month0);
 
-			        record_month3_value = (TextView)v.findViewById(R.id.record_month3_value);
-			        record_month2_value = (TextView)v.findViewById(R.id.record_month2_value);
-			        record_month1_value = (TextView)v.findViewById(R.id.record_month1_value);
-			        record_month0_value = (TextView)v.findViewById(R.id.record_month0_value);
+			        record_month3_total = (TextView)v.findViewById(R.id.record_month3_total);
+			        record_month2_total = (TextView)v.findViewById(R.id.record_month2_total);
+			        record_month1_total = (TextView)v.findViewById(R.id.record_month1_total);
+			        record_month0_total = (TextView)v.findViewById(R.id.record_month0_total);
 
 			        updateTextView();
 
 			        return v;
 			    }
 
-				public void updateTextView(){
+			    public void updateTextView(){
 			        if(null != record_month3){
-			            if((RecordLab.get(getActivity()).getRecord_Months())[3].equals("")){
+			            if(RecordLab.get(getActivity()).getRecord_Months(3).equals("")){
 			                Calendar cal = Calendar.getInstance();
-			                cal.add(Calendar.MONTH,-3);
 
 			                record_month3.setText(DateFormat.format("yyyy-MM",cal.getTime()));
 			            }else{
-			                record_month3.setText((RecordLab.get(getActivity()).getRecord_Months())[3]);
+			                record_month3.setText(RecordLab.get(getActivity()).getRecord_Months(3));
 			            }
 			        }
 			        if(null != record_month2){
-			            if((RecordLab.get(getActivity()).getRecord_Months())[2].equals("")){
-			                Calendar cal = Calendar.getInstance();
-			                cal.add(Calendar.MONTH,-2);
-
-			                record_month2.setText(DateFormat.format("yyyy-MM",cal.getTime()));
-			            }else{
-			                record_month2.setText((RecordLab.get(getActivity()).getRecord_Months())[2]);
-			            }
-			        }
-			        if(null != record_month1){
-			            if((RecordLab.get(getActivity()).getRecord_Months())[1].equals("")){
+			            if(RecordLab.get(getActivity()).getRecord_Months(2).equals("")){
 			                Calendar cal = Calendar.getInstance();
 			                cal.add(Calendar.MONTH,-1);
 
+			                record_month2.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+			            }else{
+			                record_month2.setText(RecordLab.get(getActivity()).getRecord_Months(2));
+			            }
+			        }
+			        if(null != record_month1){
+			            if(RecordLab.get(getActivity()).getRecord_Months(1).equals("")){
+			                Calendar cal = Calendar.getInstance();
+			                cal.add(Calendar.MONTH,-2);
+
 			                record_month1.setText(DateFormat.format("yyyy-MM",cal.getTime()));
 			            }else{
-			                record_month1.setText((RecordLab.get(getActivity()).getRecord_Months())[1]);
+			                record_month1.setText(RecordLab.get(getActivity()).getRecord_Months(1));
 			            }
 			        }
 			        if(null != record_month0){
-			            if((RecordLab.get(getActivity()).getRecord_Months())[0].equals("")){
+			            if(RecordLab.get(getActivity()).getRecord_Months(0).equals("")){
 			                Calendar cal = Calendar.getInstance();
+			                cal.add(Calendar.MONTH,-3);
 
 			                record_month0.setText(DateFormat.format("yyyy-MM",cal.getTime()));
 			            }else{
-			                record_month0.setText((RecordLab.get(getActivity()).getRecord_Months())[0]);
+			                record_month0.setText(RecordLab.get(getActivity()).getRecord_Months(0));
 			            }
 			        }
 
-			        if(null != record_month3_value){
-			            record_month3_value.setText((RecordLab.get(getActivity()).getTotal_month())[3]);
+			        if(null != record_month3_total){
+			            record_month3_total.setText(String.valueOf(
+			                    RecordLab.get(getActivity()).getTotal_month(3)
+			            ));
 			        }
-			        if(null != record_month2_value){
-			            record_month2_value.setText((RecordLab.get(getActivity()).getTotal_month())[2]);
+			        if(null != record_month2_total){
+			            record_month2_total.setText(String.valueOf(
+			                    RecordLab.get(getActivity()).getTotal_month(2)
+			            ));
 			        }
-			        if(null != record_month1_value){
-			            record_month1_value.setText((RecordLab.get(getActivity()).getTotal_month())[1]);
+			        if(null != record_month1_total){
+			            record_month1_total.setText(String.valueOf(
+			                    RecordLab.get(getActivity()).getTotal_month(1)
+			            ));
 			        }
-			        if(null != record_month0_value){
-			            record_month0_value.setText((RecordLab.get(getActivity()).getTotal_month())[0]);
+			        if(null != record_month0_total){
+			            record_month0_total.setText(String.valueOf(
+			                    RecordLab.get(getActivity()).getTotal_month(0)
+			            ));
 			        }
-			    }
-
-				@Override
-			    public void onStart() {
-			        super.onStart();
-			        getActivity().setTitle(R.string.total_month_title);
 			    }
 			}
 			```
@@ -1417,3 +1420,150 @@ an Android app for recording living expense
 * step10
 	* 发现bug: 当滑动到列表时,程序崩溃;
 	* 本地存储数据,开启时,读取数据;
+	* bug修复
+		* setText里不能是数字,必须换成CharSequence或者String;
+	* 本地存储数据		
+		* 首先在Record.java中实现Record类的JSON序列化功能和接受JSONObject对象的构造方法
+
+			```java
+			private static final String JSON_DATE = "date";
+		    private static final String JSON_BREAKFAST = "breakfast";
+		    private static final String JSON_LUNCH = "lunch";
+		    private static final String JSON_DINNER = "dinner";
+
+		    public JSONObject toJSON() throws JSONException {
+		        JSONObject json = new JSONObject();
+
+		        json.put(JSON_DATE,Integer.parseInt(toString()));
+		        json.put(JSON_BREAKFAST,mBreakfast);
+		        json.put(JSON_LUNCH,mLunch);
+		        json.put(JSON_DINNER,mDinner);
+
+		        return json;
+		    }
+
+			public Record(JSONObject json) throws JSONException, ParseException {
+		        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+		        mDate =  df.parse(json.getString(JSON_DATE));
+		        mBreakfast = json.getInt(JSON_BREAKFAST);
+		        mLunch = json.getInt(JSON_LUNCH);
+		        mDinner = json.getInt(JSON_DINNER);
+		    }
+			```
+
+		* 然后创建新类RecordJSONSerializer.java用于创建和解析json数据
+
+			```java
+			public class RecordJSONSerializer extends Object {
+			    private Context mContext;
+			    private String mFilename;
+
+			    public RecordJSONSerializer(Context c, String f){
+			        mContext = c;
+			        mFilename = f;
+			    }
+
+			    public void saveRecords(ArrayList<Record> records)
+			        throws JSONException, IOException{
+			        //Build an array in JSON
+			        JSONArray array = new JSONArray();
+			        for(Record record : records){
+			            array.put(record.toJSON());
+			        }
+
+			        //Write the file to disk
+			        Writer writer = null;
+			        try{
+			            OutputStream out = mContext
+			                    .openFileOutput(mFilename, Context.MODE_PRIVATE);
+			            writer = new OutputStreamWriter(out);
+			            writer.write(array.toString());
+			        }finally {
+			            if(null != writer){
+			                writer.close();
+			            }
+			        }
+			    }
+
+			    public ArrayList<Record> loadRecords()
+			            throws JSONException, IOException, ParseException{
+			        ArrayList<Record> records = new ArrayList<Record>();
+			        BufferedReader reader = null;
+			        try{
+			            //open and read the file into a StringBuilder
+			            InputStream in = mContext.openFileInput(mFilename);
+			            reader = new BufferedReader(new InputStreamReader(in));
+			            StringBuilder jsonString = new StringBuilder();
+			            String line = null;
+			            while(null != (line = reader.readLine())){
+			                // Line breaks are omitted and irrelevant
+			                jsonString.append(line);
+			            }
+			            // Parse the JSON using JSONTokener
+			            JSONArray array = (JSONArray)(new JSONTokener(jsonString.toString()).nextValue());
+			            // Build the array of records from JSONObjects
+			            for(int i = 0; i < array.length(); ++ i){
+			                records.add(new Record(array.getJSONObject(i)));
+			            }
+			        }catch(FileNotFoundException e){
+			            // Ignore this one; it happens when starting fresh
+			        }finally{
+			            if(null != reader){
+			                reader.close();
+			            }
+			        }
+			        return records;
+			    }
+			}
+			```
+
+		* 在RecordLab中读取数据并实现保存方法
+
+			```java
+			private static final String FILENAME = "records.json";
+		    private RecordJSONSerializer mSerializer;
+
+		    private RecordLab(Context appContext){
+		        mAppContext = appContext;
+		        total_month = new int[4];
+		        record_months = new String[4];
+		        mSerializer = new RecordJSONSerializer(mAppContext,FILENAME);
+		        try{
+		            mRecords = mSerializer.loadRecords();
+		        }catch(Exception e){
+		            mRecords = new ArrayList<Record>();
+		        }
+
+				for(int i = 0; i < total_month.length; ++ i){
+		            total_month[i] = 0;
+		            record_months[i] = "";
+		        }
+		        updateRecords();
+		    }
+
+		    public boolean saveRecords(){
+		        try{
+		            mSerializer.saveRecords(mRecords);
+		            return true;
+		        }catch(Exception e){
+		            return false;
+		        }
+		    }
+			```
+
+		* 在RecordActivity的onPause()方法中保存数据
+
+			```java
+			@Override
+		    protected void onPause() {
+		        super.onPause();
+		        RecordLab.get(getApplicationContext()).saveRecords();
+		    }
+			```
+* step11
+	* 现在大致的框架已经做好了,可以投入使用了;
+	* 但是还是想要添加上下文操作添加删除功能;
+	* 想要添加拍照记录功能;
+	* 想要添加可自定义背景图片功能;
+	* 想要打开app的时候,能有一张自定义图片显示一会儿;
+	* 想要UI美化一点;
