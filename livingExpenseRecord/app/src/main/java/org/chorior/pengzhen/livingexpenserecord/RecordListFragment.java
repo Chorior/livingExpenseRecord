@@ -1,13 +1,21 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,6 +67,62 @@ public class RecordListFragment extends ListFragment {
         mRecords = RecordLab.get(getActivity()).getRecords();
         adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        if(null != v.findViewById(android.R.id.list)){
+            ListView listView = (ListView)v.findViewById(android.R.id.list);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+                // Use contextual action bar on device
+                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+                    }
+
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        MenuInflater inflater = mode.getMenuInflater();
+                        inflater.inflate(R.menu.record_list_item_context,menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.menu_item_delete_record:
+                                for(int i = adapter.getCount() - 1; i >= 0; -- i){
+                                    if(getListView().isItemChecked(i)){
+                                        RecordLab.get(getActivity()).deleteRecord(
+                                                adapter.getItem(i)
+                                        );
+                                    }
+                                }
+                                mode.finish();
+                                refreshData();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+
+                    }
+                });
+            }
+        }
+        return v;
     }
 
     @Override

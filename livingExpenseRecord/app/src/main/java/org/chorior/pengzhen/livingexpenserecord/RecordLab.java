@@ -70,6 +70,19 @@ public class RecordLab {
         return null;
     }
 
+    public void deleteRecord(Record record)
+    {
+        if(!mRecords.isEmpty()) {
+            for(int i = mRecords.size() - 1; i >= 0; -- i){
+                if(mRecords.get(i).toString().equals(record.toString())){
+                    mRecords.remove(i);
+                    break;
+                }
+            }
+        }
+        updateRecords();
+    }
+
     public void addRecord(Record record)
     {
         if(!mRecords.isEmpty()) {
@@ -80,21 +93,19 @@ public class RecordLab {
                 }
             }
         }
-
         mRecords.add(new Record(record));
         updateRecords();
     }
 
     // only record the past 3 months and this month's cost at most
     private void updateRecords(){
+        Collections.sort(mRecords,Record.DateComparator);
+        for(int i = 0; i < total_month.length; ++ i){
+            total_month[i] = 0;
+            record_months[i] = "";
+        }
+
         if(!mRecords.isEmpty()){
-
-            Collections.sort(mRecords,Record.DateComparator);
-            for(int i = 0; i < total_month.length; ++ i){
-                total_month[i] = 0;
-                record_months[i] = "";
-            }
-
             int index_totalMonth = 3;
             String str_temp = mRecords.get(mRecords.size() - 1).getYearAndMonthDate();
             for(int i = mRecords.size() - 1; i >= 0; -- i){
