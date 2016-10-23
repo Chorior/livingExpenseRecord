@@ -1563,6 +1563,7 @@ an Android app for recording living expense
 * step11
 	* 现在大致的框架已经做好了,可以投入使用了;
 	* 但是还是想要添加上下文操作添加删除功能;
+	* 想要添加可自定义添加或删除的其他计费事项,包括title,content,an optional picture and a cost;
 	* 想要添加拍照记录功能;
 	* 想要添加可自定义背景图片功能;
 	* 想要打开app的时候,能有一张自定义图片显示一会儿;
