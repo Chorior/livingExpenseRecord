@@ -3,67 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
     >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/record_breakfast_label"
+        android:text="@string/custom_title"
         style="?android:listSeparatorTextViewStyle"
         />
     <EditText
-        android:id="@+id/record_breakfast"
-        android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
+        android:id="@+id/custom_record_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/record_breakfast_hint"
+        android:maxLines="1"
+        android:hint="@string/custom_title_hint"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/record_lunch_label"
+        android:text="@string/custom_cost"
         style="?android:listSeparatorTextViewStyle"
         />
     <EditText
-        android:id="@+id/record_lunch"
-        android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
+        android:id="@+id/custom_record_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/record_lunch_hint"
+        android:maxLines="1"
+        android:hint="@string/custom_cost_hint"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/record_dinner_label"
+        android:text="@string/custom_text"
         style="?android:listSeparatorTextViewStyle"
         />
     <EditText
-        android:id="@+id/record_dinner"
+        android:id="@+id/custom_record_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:maxLines="1"
-        android:maxLength="7"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:hint="@string/record_dinner_hint"
+        android:hint="@string/custom_text_hint"
+        android:inputType="textMultiLine"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/record_total_today"
-        android:gravity="end"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        style="?android:listSeparatorTextViewStyle"
-        />
+
 </LinearLayout>

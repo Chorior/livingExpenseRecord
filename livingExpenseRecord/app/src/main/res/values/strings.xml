@@ -15,4 +15,10 @@
     <string name="record_list_title">Records</string>
     <string name="empty_text">No data!</string>
     <string name="total_month_title">Total</string>
+    <string name="custom_title">TITLE</string>
+    <string name="custom_cost">COST</string>
+    <string name="custom_text">TEXT</string>
+    <string name="custom_title_hint">Enter a title</string>
+    <string name="custom_cost_hint">Enter a cost</string>
+    <string name="custom_text_hint">Type your text here</string>
 </resources>

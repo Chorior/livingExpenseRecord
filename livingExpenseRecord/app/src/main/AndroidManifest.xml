@@ -24,6 +24,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RecordActivity"/>
         </activity>
+        <activity
+            android:name=".CustomRecordActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RecordActivity"/>
+        </activity>
     </application>
 
 </manifest>
