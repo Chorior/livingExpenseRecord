@@ -1075,8 +1075,7 @@ an Android app for recording living expense
 			```
 
 		* 响应向上按钮(finalRecordActivity.java)
-			* 首先在onCreate方法中添加`setHasOptionsMenu(true);`
-			* 然后利用NavUtils与mainfest实现层级式导航
+			* 利用NavUtils与mainfest实现层级式导航
 				* 修改AndroidMainfest.xml
 					* 为mainActivity添加launchMode属性为singleTop;
 					* 为finalRecordActivity声明添加新的meta-data属性,指定父类为RecordActivity
@@ -1101,20 +1100,20 @@ an Android app for recording living expense
 						```
 				* 重写onOptionsItemSelected方法
 
-				```java
-				@Override
-			    public boolean onOptionsItemSelected(MenuItem item) {
-			        switch(item.getItemId()){
-			            case android.R.id.home:
-			                if(null != NavUtils.getParentActivityName(this)){
-			                    NavUtils.navigateUpFromSameTask(this);
-			                }
-			                return true;
-			            default:
-			                return super.onOptionsItemSelected(item);
-			        }
-			    }
-				```
+					```java
+					@Override
+				    public boolean onOptionsItemSelected(MenuItem item) {
+				        switch(item.getItemId()){
+				            case android.R.id.home:
+				                if(null != NavUtils.getParentActivityName(this)){
+				                    NavUtils.navigateUpFromSameTask(this);
+				                }
+				                return true;
+				            default:
+				                return super.onOptionsItemSelected(item);
+				        }
+				    }
+					```
 
 	* 为空list视图设置空视图
 
@@ -1563,7 +1562,7 @@ an Android app for recording living expense
 * step11
 	* 现在大致的框架已经做好了,可以投入使用了;
 	* 但是还是想要添加上下文操作添加删除功能;
-	* 想要添加可自定义添加或删除的其他计费事项,包括title,content,an optional picture and a cost;
+	* 想要添加可自定义添加或删除的其他计费事项,包括title,text,an optional picture and a cost;
 	* 想要添加拍照记录功能;
 	* 想要添加可自定义背景图片功能;
 	* 想要打开app的时候,能有一张自定义图片显示一会儿;
@@ -1683,6 +1682,157 @@ an Android app for recording living expense
 				</RelativeLayout>
 				```
 
+	* 实现可添加的自定义计费事项
+		* 首先说一下思路
+			* 在RecordFragment菜单栏上新增一个添加按钮用于添加自定义事项;
+			* 点击添加按钮之后,弹出自定义事项编写界面,用户可以进行编辑;
+			* 在自定义事项菜单上添加向上导航按钮和保存按钮;
+			* 自定义事项包括一个title,一个cost,一个文本框;
+			* 在Record类中添加一个ArrayList用户保存自定义事项;
+		* 先造一个activity_custom_record.xml
+
+			```xml
+			<?xml version="1.0" encoding="utf-8"?>
+			<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:id="@+id/fragmentContainer"
+			    >
+			</FrameLayout>
+			```
+
+		* 然后创建一个CustomRecordActivity.java
+
+			```java
+			public class CustomRecordActivity extends AppCompatActivity {
+			    @Override
+			    protected void onCreate(@Nullable Bundle savedInstanceState) {
+			        super.onCreate(savedInstanceState);
+			        setContentView(R.layout.activity_custom_record);
+
+			        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			            if(null != NavUtils.getParentActivityName(this)){
+			                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			            }
+			        }
+			    }
+
+			    @Override
+			    public boolean onOptionsItemSelected(MenuItem item) {
+			        switch(item.getItemId()){
+			            case android.R.id.home:
+			                if(null != NavUtils.getParentActivityName(this)){
+			                    NavUtils.navigateUpFromSameTask(this);
+			                }
+			                return true;
+			            default:
+			                return super.onOptionsItemSelected(item);
+			        }
+			    }
+			}
+			```
+
+		* 接着创建一个自定义事项类CustomRecord.java
+
+			```java
+			public class CustomRecord extends Object {
+			    private String title;
+			    private String text;
+			    private int cost;
+
+			    public CustomRecord(){
+			        cost = 0;
+			    }
+
+			    public String getTitle() {
+			        return title;
+			    }
+
+			    public void setTitle(String title) {
+			        this.title = title;
+			    }
+
+			    public String getText() {
+			        return text;
+			    }
+
+			    public void setText(String text) {
+			        this.text = text;
+			    }
+
+			    public int getCost() {
+			        return cost;
+			    }
+
+			    public void setCost(int cost) {
+			        this.cost = cost;
+			    }
+			}
+			```
+
+		* 创建CustomRecordFragment.java
+
+			```java
+			public class CustomRecordFragment extends Fragment {
+			    private CustomRecord mCustomRecord;
+			    private EditText mTitleField;
+			    private EditText mCostField;
+			    private EditText mTextField;
+
+			    @Override
+			    public void onCreate(@Nullable Bundle savedInstanceState) {
+			        super.onCreate(savedInstanceState);
+			        mCustomRecord = new CustomRecord();
+
+			        setHasOptionsMenu(true);
+			    }
+
+			    @Nullable
+			    @Override
+			    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+			        View v = super.onCreateView(inflater, container, savedInstanceState);
+			        mTitleField = (EditText)v.findViewById(R.id.custom_record_title);
+			        mCostField = (EditText)v.findViewById(R.id.custom_record_cost);
+			        mTextField = (EditText)v.findViewById(R.id.custom_record_text);
+			        return v;
+			    }
+
+			    @Override
+			    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			        super.onCreateOptionsMenu(menu, inflater);
+			        inflater.inflate(R.menu.fragment_custom_record_menu,menu);
+			    }
+
+			    @Override
+			    public boolean onOptionsItemSelected(MenuItem item) {
+			        switch(item.getItemId()){
+			            case R.id.menu_item_save_record:
+			                if(0 != mTitleField.getText().length()){
+			                    mCustomRecord.setTitle(mTitleField.getText().toString());
+			                }else{
+			                    mCustomRecord.setTitle("");
+			                }
+			                if(0 != mCostField.getText().length()){
+			                    mCustomRecord.setCost(
+			                            Integer.parseInt(mCostField.getText().toString())
+			                    );
+			                }else{
+			                    mCustomRecord.setCost(0);
+			                }
+			                if(0 != mTextField.getText().length()){
+			                    mCustomRecord.setText(mTextField.getText().toString());
+			                }else{
+			                    mCustomRecord.setText("");
+			                }
+			                return true;
+			            default:
+			                return super.onOptionsItemSelected(item);
+			        }
+			    }
+			}
+			```
+
+		* 接下来要在Record里添加自定义ArrayList保存CustomRecord,明天再搞
 
 
 
