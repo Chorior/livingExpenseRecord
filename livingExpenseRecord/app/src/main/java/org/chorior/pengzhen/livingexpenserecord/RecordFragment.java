@@ -117,7 +117,10 @@ public class RecordFragment extends Fragment {
                             mDinnerField.setText(String.valueOf(r.getmDinner()));
                         }
                     }
-
+                    if(null != mTotal_today){
+                        mTotal_today.setText(str_total_today_prefix + "" +
+                                r.getmTotal_today());
+                    }
                     isFound = true;
                     break;
                 }
@@ -132,6 +135,9 @@ public class RecordFragment extends Fragment {
                 }
                 if(null != mDinnerField){
                     mDinnerField.setText("");
+                }
+                if(null != mTotal_today){
+                    mTotal_today.setText(str_total_today_prefix + "0");
                 }
             }
         }
