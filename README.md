@@ -1709,11 +1709,22 @@ an Android app for recording living expense
 			    protected void onCreate(@Nullable Bundle savedInstanceState) {
 			        super.onCreate(savedInstanceState);
 			        setContentView(R.layout.activity_custom_record);
+			        setTitle(R.string.custom_record_title);
 
 			        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
 			            if(null != NavUtils.getParentActivityName(this)){
 			                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			            }
+			        }
+
+			        FragmentManager fm = getSupportFragmentManager();
+			        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+			        if(null == fragment){
+			            fragment = new CustomRecordFragment();
+			            fm.beginTransaction()
+			                    .add(R.id.fragmentContainer,fragment)
+			                    .commit();
 			        }
 			    }
 
@@ -1833,6 +1844,136 @@ an Android app for recording living expense
 			```
 
 		* 接下来要在Record里添加自定义ArrayList保存CustomRecord,明天再搞
+			* 发现旋转时原activity会被销毁,所以保存一些信息用来创建与原来一样的Activity(RecordActivity.java)
+
+				```java
+				@Override
+			    protected void onSaveInstanceState(Bundle outState) {
+			        super.onSaveInstanceState(outState);
+			        if(null != mViewPager){
+			            outState.putInt(KEY_INDEX,mViewPager.getCurrentItem());
+			        }
+			    }
+
+				@Override
+			    protected void onResume() {
+			        super.onResume();
+			        mViewPager.setCurrentItem(savedIndex);
+			        switch(savedIndex){
+			            case 0:
+			                Date date = new Date();
+			                setTitle(DateFormat.format("yyyy-MM-dd",date));
+			                break;
+			            case 1:
+			                setTitle(R.string.record_list_title);
+			                break;
+			            case 2:
+			                setTitle(R.string.total_month_title);
+			                break;
+			            default:
+			        }
+			    }
+				```
+
+			* 如何在Record类中获取保存的CustomRecord消息呢
+				* 首先在RecordLab中新建`ArrayList<CustomRecord>`便于获取得到的CustomRecord实例;
+				* 然后RecordFragment中的Record实例通过判断RecordLab中的`ArrayList<CustomRecord>`是否为空来获取保存的CustomRecord实例;
+			* 为RecordFragment添加add菜单项,点击之后打开CustomRecordActivity;
+			* 用listView在RecordFragment中显示保存的自定义事项;
+				* 首先为列表项创建视图list_item_custom_record.xml
+
+					```xml
+					<?xml version="1.0" encoding="utf-8"?>
+					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:background="@drawable/background_activated">
+
+					    <TextView
+					        android:id="@+id/custom_record_list_item_title"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:gravity="start"
+					        android:textStyle="bold"
+					        android:paddingLeft="4dp"
+					        android:paddingRight="4dp"
+					        android:text="@string/custom_record_item_titleText"
+					        />
+					    <TextView
+					        android:id="@+id/custom_record_list_item_cost"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@id/custom_record_list_item_title"
+					        android:gravity="end"
+					        android:layout_alignParentRight="true"
+					        android:layout_alignParentEnd="true"
+					        android:paddingLeft="4dp"
+					        android:paddingRight="4dp"
+					        android:text="@string/custom_record_item_costText"
+					        />
+					</RelativeLayout>
+					```
+
+				* 然后在fragment_record.xml里添加listView组件
+
+					```xml
+					<ListView
+				        android:id="@+id/custom_record_list"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        >
+				    </ListView>
+					```
+
+				* 接着在RecordFragment.java里面配置这个ListView
+
+					```java
+					private class CustomRecordAdapter extends ArrayAdapter<CustomRecord>{
+				        public CustomRecordAdapter(ArrayList<CustomRecord> customRecords){
+				            super(getActivity(),0,customRecords);
+				        }
+
+				        @NonNull
+				        @Override
+				        public View getView(int position, View convertView, ViewGroup parent) {
+				            // if we weren't given a view, inflate one
+				            if(null == convertView){
+				                convertView = getActivity().getLayoutInflater()
+				                        .inflate(R.layout.list_item_custom_record, null);
+				            }
+
+				            // configure the view for this record
+				            CustomRecord customRecord = getItem(position);
+
+				            TextView TitleTextView =
+				                    (TextView)convertView.findViewById(R.id.custom_record_list_item_title);
+				            TitleTextView.setText(customRecord.getTitle());
+
+				            TextView costTextView =
+				                    (TextView)convertView.findViewById(R.id.custom_record_list_item_cost);
+				            costTextView.setText(String.valueOf(customRecord.getCost()));
+
+				            return convertView;
+				        }
+				    }
+
+					@Override
+				    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+				                             Bundle savedInstanceState)
+				    {
+				        View v = inflater.inflate(R.layout.fragment_record,parent,false);
+
+				        ...
+
+				        adapter = new CustomRecordAdapter(mRecord.getmCustomRecords());
+				        ListView listView = (ListView)v.findViewById(R.id.custom_record_list);
+				        listView.setAdapter(adapter);
+
+				        return v;
+				    }
+					```
+
+				* 明天修改视图,然后保存在本地,实现点击事件,在RecordListFragment中显示保存的自定义事项;
 
 
 
