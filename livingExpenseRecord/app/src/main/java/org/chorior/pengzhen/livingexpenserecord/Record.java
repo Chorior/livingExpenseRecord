@@ -124,6 +124,10 @@ public class Record extends Object {
         }
     };
 
+    public ArrayList<CustomRecord> getmCustomRecords() {
+        return mCustomRecords;
+    }
+
     public void addCustomRecord(CustomRecord customRecord){
         mCustomRecords.add(customRecord);
     }

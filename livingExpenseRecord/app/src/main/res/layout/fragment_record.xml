@@ -66,5 +66,16 @@
         android:layout_marginRight="16dp"
         style="?android:listSeparatorTextViewStyle"
         />
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/custom_record_label"
+        style="?android:listSeparatorTextViewStyle"
+        />
+    <ListView
+        android:id="@+id/custom_record_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </ListView>
 </LinearLayout>

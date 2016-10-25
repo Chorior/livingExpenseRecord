@@ -2,6 +2,7 @@ package org.chorior.pengzhen.livingexpenserecord;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -10,9 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -26,6 +30,8 @@ public class RecordFragment extends Fragment {
     private EditText mDinnerField;
     private TextView mTotal_today;
     private final String str_total_today_prefix = "TOTAL ";
+
+    private CustomRecordAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -49,6 +55,10 @@ public class RecordFragment extends Fragment {
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
         mTotal_today.setText(str_total_today_prefix + "" +
                 mRecord.getmTotal_today());
+
+        adapter = new CustomRecordAdapter(mRecord.getmCustomRecords());
+        ListView listView = (ListView)v.findViewById(R.id.custom_record_list);
+        listView.setAdapter(adapter);
 
         return v;
     }
@@ -100,6 +110,8 @@ public class RecordFragment extends Fragment {
 
     public void updateRecordFragmentView(){
         if(0 != RecordLab.get(getActivity()).getRecords().size()){
+            adapter.notifyDataSetChanged();
+
             boolean isFound = false;
             for(Record r : RecordLab.get(getActivity()).getRecords()){
                 Record record = new Record();
@@ -154,6 +166,35 @@ public class RecordFragment extends Fragment {
                     RecordLab.get(getActivity()).getCustomRecords().get(0)
             );
             RecordLab.get(getActivity()).getCustomRecords().clear();
+        }
+    }
+
+    private class CustomRecordAdapter extends ArrayAdapter<CustomRecord>{
+        public CustomRecordAdapter(ArrayList<CustomRecord> customRecords){
+            super(getActivity(),0,customRecords);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // if we weren't given a view, inflate one
+            if(null == convertView){
+                convertView = getActivity().getLayoutInflater()
+                        .inflate(R.layout.list_item_custom_record, null);
+            }
+
+            // configure the view for this record
+            CustomRecord customRecord = getItem(position);
+
+            TextView TitleTextView =
+                    (TextView)convertView.findViewById(R.id.custom_record_list_item_title);
+            TitleTextView.setText(customRecord.getTitle());
+
+            TextView costTextView =
+                    (TextView)convertView.findViewById(R.id.custom_record_list_item_cost);
+            costTextView.setText(String.valueOf(customRecord.getCost()));
+
+            return convertView;
         }
     }
 }

@@ -32,6 +32,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:maxLines="1"
+        android:maxLength="7"
+        android:inputType="number"
         android:hint="@string/custom_cost_hint"
         />
     <TextView
@@ -46,7 +48,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:maxLines="1"
         android:hint="@string/custom_text_hint"
         android:inputType="textMultiLine"
         />
