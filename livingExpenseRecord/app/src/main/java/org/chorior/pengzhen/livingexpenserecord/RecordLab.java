@@ -1,13 +1,10 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by pengzhen on 14/10/16.
@@ -17,6 +14,7 @@ public class RecordLab {
     private static RecordLab sRecordLab;
     private Context mAppContext;
     private ArrayList<Record> mRecords;
+    private ArrayList<CustomRecord> mCustomRecords;
     private int[] total_month;
     private String[] record_months;
 
@@ -25,6 +23,7 @@ public class RecordLab {
 
     private RecordLab(Context appContext){
         mAppContext = appContext;
+        mCustomRecords = new ArrayList<CustomRecord>();
         total_month = new int[4];
         record_months = new String[4];
         mSerializer = new RecordJSONSerializer(mAppContext,FILENAME);
@@ -55,6 +54,16 @@ public class RecordLab {
 
     public ArrayList<Record> getRecords(){
         return mRecords;
+    }
+
+    public ArrayList<CustomRecord> getCustomRecords(){ return mCustomRecords; }
+    public void addCustomRecord(CustomRecord customRecord){
+        if(null != mCustomRecords){
+            if(!mCustomRecords.isEmpty()){
+                mCustomRecords.clear();
+            }
+            mCustomRecords.add(customRecord);
+        }
     }
 
     public Record getRecord(Date date){

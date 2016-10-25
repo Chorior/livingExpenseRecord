@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
@@ -21,6 +22,7 @@ public class Record extends Object {
     private int mLunch;
     private int mDinner;
     private int mTotal_today;
+    private ArrayList<CustomRecord> mCustomRecords;
 
     private static final String JSON_DATE = "date";
     private static final String JSON_BREAKFAST = "breakfast";
@@ -44,6 +46,7 @@ public class Record extends Object {
         mBreakfast = json.getInt(JSON_BREAKFAST);
         mLunch = json.getInt(JSON_LUNCH);
         mDinner = json.getInt(JSON_DINNER);
+        mCustomRecords = new ArrayList<CustomRecord>();
     }
 
     public Date getmDate() {
@@ -93,6 +96,7 @@ public class Record extends Object {
         mLunch = 0;
         mDinner = 0;
         mTotal_today = 0;
+        mCustomRecords = new ArrayList<CustomRecord>();
     }
 
     public Record(Record record){
@@ -119,4 +123,14 @@ public class Record extends Object {
             return o1.mDate.compareTo(o2.mDate);
         }
     };
+
+    public void addCustomRecord(CustomRecord customRecord){
+        mCustomRecords.add(customRecord);
+    }
+
+    public void deleteCustomRecord(int i){
+        if(i >= 0 && i < mCustomRecords.size()){
+            mCustomRecords.remove(i);
+        }
+    }
 }

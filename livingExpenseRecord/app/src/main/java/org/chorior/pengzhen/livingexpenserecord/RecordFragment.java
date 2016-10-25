@@ -1,5 +1,6 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -88,6 +89,10 @@ public class RecordFragment extends Fragment {
 
                 RecordLab.get(getActivity()).addRecord(mRecord);
                 return true;
+            case R.id.menu_item_add_record:
+                Intent i = new Intent(getActivity(),CustomRecordActivity.class);
+                startActivity(i);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -143,8 +148,12 @@ public class RecordFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Date date = new Date();
-        getActivity().setTitle(DateFormat.format("yyyy-MM-dd",date));
         updateRecordFragmentView();
+        if(!RecordLab.get(getActivity()).getCustomRecords().isEmpty()){
+            mRecord.addCustomRecord(
+                    RecordLab.get(getActivity()).getCustomRecords().get(0)
+            );
+            RecordLab.get(getActivity()).getCustomRecords().clear();
+        }
     }
 }

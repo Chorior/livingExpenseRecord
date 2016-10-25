@@ -31,8 +31,9 @@ public class CustomRecordFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_custom_record, parent, false);
         mTitleField = (EditText)v.findViewById(R.id.custom_record_title);
         mCostField = (EditText)v.findViewById(R.id.custom_record_cost);
         mTextField = (EditText)v.findViewById(R.id.custom_record_text);
@@ -48,7 +49,7 @@ public class CustomRecordFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-            case R.id.menu_item_save_record:
+            case R.id.menu_item_save_custom_record:
                 if(0 != mTitleField.getText().length()){
                     mCustomRecord.setTitle(mTitleField.getText().toString());
                 }else{
@@ -66,6 +67,7 @@ public class CustomRecordFragment extends Fragment {
                 }else{
                     mCustomRecord.setText("");
                 }
+                RecordLab.get(getActivity()).addCustomRecord(mCustomRecord);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

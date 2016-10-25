@@ -66,4 +66,5 @@
         android:layout_marginRight="16dp"
         style="?android:listSeparatorTextViewStyle"
         />
+
 </LinearLayout>

@@ -11,10 +11,12 @@
     <string name="record_list_item_totalTodayText">Record totalToday</string>
     <string name="record_list_item_dateText">Record Date</string>
     <string name="save_record">Save Record</string>
+    <string name="add_custom_record">Add Custom Record</string>
     <string name="delete_record">Delete Record</string>
     <string name="record_list_title">Records</string>
     <string name="empty_text">No data!</string>
     <string name="total_month_title">Total</string>
+    <string name="custom_record_title">Custom Record</string>
     <string name="custom_title">TITLE</string>
     <string name="custom_cost">COST</string>
     <string name="custom_text">TEXT</string>
