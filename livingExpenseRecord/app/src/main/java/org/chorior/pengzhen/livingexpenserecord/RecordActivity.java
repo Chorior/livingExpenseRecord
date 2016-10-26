@@ -4,9 +4,12 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +24,7 @@ public class RecordActivity extends AppCompatActivity {
     private List<Fragment> mFragmentList = new ArrayList<>();;
     private static final String KEY_INDEX = "index";
     private int savedIndex = 0;
+    private List<ImageView> dots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,8 @@ public class RecordActivity extends AppCompatActivity {
         mFragmentList.add(fragment0);
         mFragmentList.add(fragment1);
         mFragmentList.add(fragment2);
+
+        addDots();
 
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setOffscreenPageLimit(mFragmentList.size());
@@ -70,14 +76,23 @@ public class RecordActivity extends AppCompatActivity {
                         Date date = new Date();
                         setTitle(DateFormat.format("yyyy-MM-dd",date));
                         mRecord_fragment.updateRecordFragmentView();
+                        dots.get(0).setImageResource(R.drawable.ic_dot_selected);
+                        dots.get(1).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(2).setImageResource(R.drawable.ic_dot_normal);
                         break;
                     case 1:
                         setTitle(R.string.record_list_title);
                         mRecordListFragment.refreshData();
+                        dots.get(0).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(1).setImageResource(R.drawable.ic_dot_selected);
+                        dots.get(2).setImageResource(R.drawable.ic_dot_normal);
                         break;
                     case 2:
                         setTitle(R.string.total_month_title);
                         mFragment_total_month.updateTextView();
+                        dots.get(0).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(1).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(2).setImageResource(R.drawable.ic_dot_selected);
                         break;
                     default:
                 }
@@ -98,12 +113,21 @@ public class RecordActivity extends AppCompatActivity {
             case 0:
                 Date date = new Date();
                 setTitle(DateFormat.format("yyyy-MM-dd",date));
+                dots.get(0).setImageResource(R.drawable.ic_dot_selected);
+                dots.get(1).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(2).setImageResource(R.drawable.ic_dot_normal);
                 break;
             case 1:
                 setTitle(R.string.record_list_title);
+                dots.get(0).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(1).setImageResource(R.drawable.ic_dot_selected);
+                dots.get(2).setImageResource(R.drawable.ic_dot_normal);
                 break;
             case 2:
                 setTitle(R.string.total_month_title);
+                dots.get(0).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(1).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(2).setImageResource(R.drawable.ic_dot_selected);
                 break;
             default:
         }
@@ -112,6 +136,7 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        savedIndex = mViewPager.getCurrentItem();
         RecordLab.get(getApplicationContext()).saveRecords();
     }
 
@@ -120,6 +145,24 @@ public class RecordActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if(null != mViewPager){
             outState.putInt(KEY_INDEX,mViewPager.getCurrentItem());
+        }
+    }
+
+    public void addDots() {
+        dots = new ArrayList<>();
+        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.dots);
+
+        for (int i = 0; i < mFragmentList.size(); i++) {
+            ImageView dot = new ImageView(this);
+            dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_dot_normal));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            dotsLayout.addView(dot, params);
+
+            dots.add(dot);
         }
     }
 }
