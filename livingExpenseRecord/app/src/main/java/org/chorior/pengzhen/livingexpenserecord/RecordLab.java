@@ -1,13 +1,10 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by pengzhen on 14/10/16.
@@ -93,7 +90,7 @@ public class RecordLab {
     }
 
     // only record the past 3 months and this month's cost at most
-    private void updateRecords(){
+    public void updateRecords(){
         for(int i = 0; i < total_month.length; ++ i){
             total_month[i] = 0;
             record_months[i] = "";

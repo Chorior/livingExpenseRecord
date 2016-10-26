@@ -1,6 +1,5 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
-import android.annotation.TargetApi;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,7 @@ public class finalRecordFragment extends Fragment {
     private TextView mBreakfast;
     private TextView mLunch;
     private TextView mDinner;
+    private TextView mOthers;
     private TextView mTotal_today;
 
     @Override
@@ -50,6 +50,9 @@ public class finalRecordFragment extends Fragment {
 
         mDinner = (TextView)v.findViewById(R.id.record_dinner_final);
         mDinner.setText(String.valueOf(mRecord.getmDinner()));
+
+        mOthers = (TextView)v.findViewById(R.id.record_others_final);
+        mOthers.setText(String.valueOf(mRecord.getmOthers()));
 
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today_final);
         mTotal_today.setText(String.valueOf(mRecord.getmTotal_today()));

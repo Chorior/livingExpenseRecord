@@ -65,6 +65,24 @@
         android:textStyle="bold"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:text="@string/record_others_label"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_others_final"
+        android:gravity="end"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        style="?android:listSeparatorTextViewStyle"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textStyle="bold"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/record_totalToday_label"
         />
     <TextView

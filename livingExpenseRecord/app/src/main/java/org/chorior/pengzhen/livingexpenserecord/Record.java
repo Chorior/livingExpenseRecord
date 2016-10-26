@@ -20,12 +20,14 @@ public class Record extends Object {
     private int mBreakfast;
     private int mLunch;
     private int mDinner;
+    private int mOthers;
     private int mTotal_today;
 
     private static final String JSON_DATE = "date";
     private static final String JSON_BREAKFAST = "breakfast";
     private static final String JSON_LUNCH = "lunch";
     private static final String JSON_DINNER = "dinner";
+    private static final String JSON_OTHERS = "others";
 
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
@@ -34,6 +36,7 @@ public class Record extends Object {
         json.put(JSON_BREAKFAST,mBreakfast);
         json.put(JSON_LUNCH,mLunch);
         json.put(JSON_DINNER,mDinner);
+        json.put(JSON_OTHERS,mOthers);
 
         return json;
     }
@@ -44,6 +47,7 @@ public class Record extends Object {
         mBreakfast = json.getInt(JSON_BREAKFAST);
         mLunch = json.getInt(JSON_LUNCH);
         mDinner = json.getInt(JSON_DINNER);
+        mOthers = json.getInt(JSON_OTHERS);
     }
 
     public Date getmDate() {
@@ -60,7 +64,7 @@ public class Record extends Object {
     }
 
     public void updatemTotal_today() {
-        mTotal_today = mBreakfast + mLunch + mDinner;
+        mTotal_today = mBreakfast + mLunch + mDinner + mOthers;
     }
 
     public int getmLunch() {
@@ -87,11 +91,20 @@ public class Record extends Object {
         this.mBreakfast = mBreakfast;
     }
 
+    public int getmOthers() {
+        return mOthers;
+    }
+
+    public void setmOthers(int mOthers) {
+        this.mOthers = mOthers;
+    }
+
     public Record() {
         mDate = new Date();
         mBreakfast = 0;
         mLunch = 0;
         mDinner = 0;
+        mOthers = 0;
         mTotal_today = 0;
     }
 
@@ -100,6 +113,7 @@ public class Record extends Object {
         mBreakfast = record.getmBreakfast();
         mLunch = record.getmLunch();
         mDinner = record.getmDinner();
+        mOthers = record.getmOthers();
         mTotal_today = record.getmTotal_today();
     }
 

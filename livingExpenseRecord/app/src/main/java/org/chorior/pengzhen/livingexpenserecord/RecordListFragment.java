@@ -3,7 +3,6 @@ package org.chorior.pengzhen.livingexpenserecord;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -109,6 +108,7 @@ public class RecordListFragment extends ListFragment {
                                 }
                                 mode.finish();
                                 refreshData();
+                                RecordLab.get(getActivity()).updateRecords();
                                 return true;
                             default:
                                 return false;

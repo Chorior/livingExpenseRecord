@@ -19,11 +19,16 @@ public class RecordActivity extends AppCompatActivity {
     private RecordListFragment mRecordListFragment;
     private fragment_total_month mFragment_total_month;
     private List<Fragment> mFragmentList = new ArrayList<>();;
+    private static final String KEY_INDEX = "index";
+    private int savedIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        if(null != savedInstanceState){
+            savedIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
 
         mRecord_fragment = new RecordFragment();
         mRecordListFragment = new RecordListFragment();
@@ -88,12 +93,33 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mViewPager.setCurrentItem(0);
+        mViewPager.setCurrentItem(savedIndex);
+        switch(savedIndex){
+            case 0:
+                Date date = new Date();
+                setTitle(DateFormat.format("yyyy-MM-dd",date));
+                break;
+            case 1:
+                setTitle(R.string.record_list_title);
+                break;
+            case 2:
+                setTitle(R.string.total_month_title);
+                break;
+            default:
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         RecordLab.get(getApplicationContext()).saveRecords();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(null != mViewPager){
+            outState.putInt(KEY_INDEX,mViewPager.getCurrentItem());
+        }
     }
 }

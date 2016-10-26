@@ -2,16 +2,12 @@ package org.chorior.pengzhen.livingexpenserecord;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +22,7 @@ public class RecordFragment extends Fragment {
     private EditText mBreakfastField;
     private EditText mLunchField;
     private EditText mDinnerField;
+    private EditText mOthersField;
     private TextView mTotal_today;
     private final String str_total_today_prefix = "TOTAL ";
 
@@ -47,6 +44,7 @@ public class RecordFragment extends Fragment {
         mBreakfastField = (EditText)v.findViewById(R.id.record_breakfast);
         mLunchField = (EditText)v.findViewById(R.id.record_lunch);
         mDinnerField = (EditText)v.findViewById(R.id.record_dinner);
+        mOthersField = (EditText)v.findViewById(R.id.record_others);
 
         mTotal_today = (TextView)v.findViewById(R.id.record_total_today);
         mTotal_today.setText(str_total_today_prefix + "" +
@@ -86,6 +84,12 @@ public class RecordFragment extends Fragment {
                 } else {
                     mRecord.setmDinner(0);
                 }
+                if(0 != mOthersField.getText().length()) {
+                    mRecord.setmOthers(
+                            Integer.parseInt(mOthersField.getText().toString()));
+                } else {
+                    mRecord.setmOthers(0);
+                }
                 mTotal_today.setText(str_total_today_prefix + "" +
                         mRecord.getmTotal_today());
 
@@ -117,6 +121,11 @@ public class RecordFragment extends Fragment {
                             mDinnerField.setText(String.valueOf(r.getmDinner()));
                         }
                     }
+                    if(0 != r.getmDinner()) {
+                        if(null != mOthersField){
+                            mOthersField.setText(String.valueOf(r.getmOthers()));
+                        }
+                    }
                     if(null != mTotal_today){
                         mTotal_today.setText(str_total_today_prefix + "" +
                                 r.getmTotal_today());
@@ -136,6 +145,9 @@ public class RecordFragment extends Fragment {
                 if(null != mDinnerField){
                     mDinnerField.setText("");
                 }
+                if(null != mOthersField){
+                    mOthersField.setText("");
+                }
                 if(null != mTotal_today){
                     mTotal_today.setText(str_total_today_prefix + "0");
                 }
@@ -146,8 +158,6 @@ public class RecordFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Date date = new Date();
-        getActivity().setTitle(DateFormat.format("yyyy-MM-dd",date));
         updateRecordFragmentView();
     }
 }

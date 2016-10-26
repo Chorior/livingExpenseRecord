@@ -3,10 +3,11 @@
     <string name="record_breakfast_hint">Enter a cost for your breakfast.</string>
     <string name="record_lunch_hint">Enter a cost for your lunch.</string>
     <string name="record_dinner_hint">Enter a cost for your dinner.</string>
+    <string name="record_others_hint">Enter a cost for others.</string>
     <string name="record_breakfast_label">BREAKFAST</string>
     <string name="record_lunch_label">LUNCH</string>
     <string name="record_dinner_label">DINNER</string>
-    <string name="record_date_label">DATE</string>
+    <string name="record_others_label">OTHERS</string>
     <string name="record_totalToday_label">TOTAL</string>
     <string name="record_list_item_totalTodayText">Record totalToday</string>
     <string name="record_list_item_dateText">Record Date</string>
