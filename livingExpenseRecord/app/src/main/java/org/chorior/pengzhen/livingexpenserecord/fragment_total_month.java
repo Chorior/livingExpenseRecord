@@ -1,10 +1,14 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,6 +48,8 @@ public class fragment_total_month extends Fragment {
 
         updateTextView();
 
+        setHasOptionsMenu(true);
+
         return v;
     }
 
@@ -52,7 +58,7 @@ public class fragment_total_month extends Fragment {
             if(RecordLab.get(getActivity()).getRecord_Months(3).equals("")){
                 Calendar cal = Calendar.getInstance();
 
-                record_month3.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+                record_month3.setText(DateFormat.format("yyyyMM",cal.getTime()));
             }else{
                 record_month3.setText(RecordLab.get(getActivity()).getRecord_Months(3));
             }
@@ -62,7 +68,7 @@ public class fragment_total_month extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.MONTH,-1);
 
-                record_month2.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+                record_month2.setText(DateFormat.format("yyyyMM",cal.getTime()));
             }else{
                 record_month2.setText(RecordLab.get(getActivity()).getRecord_Months(2));
             }
@@ -72,7 +78,7 @@ public class fragment_total_month extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.MONTH,-2);
 
-                record_month1.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+                record_month1.setText(DateFormat.format("yyyyMM",cal.getTime()));
             }else{
                 record_month1.setText(RecordLab.get(getActivity()).getRecord_Months(1));
             }
@@ -82,7 +88,7 @@ public class fragment_total_month extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.MONTH,-3);
 
-                record_month0.setText(DateFormat.format("yyyy-MM",cal.getTime()));
+                record_month0.setText(DateFormat.format("yyyyMM",cal.getTime()));
             }else{
                 record_month0.setText(RecordLab.get(getActivity()).getRecord_Months(0));
             }
@@ -107,6 +113,24 @@ public class fragment_total_month extends Fragment {
             record_month0_total.setText(String.valueOf(
                     RecordLab.get(getActivity()).getTotal_month(0)
             ));
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_total_record_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_item_chart:
+                Intent i = new Intent(getActivity(),RecordChartActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

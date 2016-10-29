@@ -123,7 +123,7 @@ public class Record extends Object {
     }
 
     public String getYearAndMonthDate(){
-        return DateFormat.format("yyyy-MM",mDate).toString();
+        return DateFormat.format("yyyyMM",mDate).toString();
     }
 
     public static Comparator<Record> DateComparator

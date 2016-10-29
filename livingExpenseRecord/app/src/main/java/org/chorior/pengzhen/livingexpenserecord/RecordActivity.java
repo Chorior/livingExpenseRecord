@@ -95,6 +95,7 @@ public class RecordActivity extends AppCompatActivity {
                         break;
                     case 2:
                         setTitle(R.string.total_month_title);
+                        RecordLab.get(getApplicationContext()).updateRecords();
                         mFragment_total_month.updateTextView();
                         dots.get(0).setImageResource(R.drawable.ic_dot_normal);
                         dots.get(1).setImageResource(R.drawable.ic_dot_normal);
@@ -131,6 +132,7 @@ public class RecordActivity extends AppCompatActivity {
                 break;
             case 2:
                 setTitle(R.string.total_month_title);
+                RecordLab.get(getApplicationContext()).updateRecords();
                 dots.get(0).setImageResource(R.drawable.ic_dot_normal);
                 dots.get(1).setImageResource(R.drawable.ic_dot_normal);
                 dots.get(2).setImageResource(R.drawable.ic_dot_selected);

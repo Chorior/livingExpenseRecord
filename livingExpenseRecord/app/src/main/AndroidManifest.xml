@@ -24,6 +24,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RecordActivity"/>
         </activity>
+        <activity
+            android:name=".testActivity"
+            android:launchMode="singleTop">
+
+        </activity>
+        <activity android:name=".RecordChartActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RecordActivity"/>
+        </activity>
     </application>
 
 </manifest>

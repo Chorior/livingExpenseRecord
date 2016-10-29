@@ -16,4 +16,5 @@
     <string name="record_list_title">Records</string>
     <string name="empty_text">No data!</string>
     <string name="total_month_title">Total</string>
+    <string name="chart">chart</string>
 </resources>
