@@ -126,6 +126,10 @@ public class Record extends Object {
         return DateFormat.format("yyyyMM",mDate).toString();
     }
 
+    public float getDay(){
+        return Float.parseFloat(DateFormat.format("dd",mDate).toString());
+    }
+
     public static Comparator<Record> DateComparator
             = new Comparator<Record>() {
         @Override

@@ -1754,6 +1754,176 @@ an Android app for recording living expense
 	            }
 	        });
 			```
+	* 为总记录生成图表
+		* 思路
+			* 生成一个分组条形图和一个折线图;
+			* 分组条形图显示记录的四个月的总消费情况,每组包含
+				* 当月总消费;
+				* 当月三餐消费;
+				* 当月其他消费;
+			* 折线图每条线显示当月每天的总消费情况;
+		* 使用MPAndroidChart库<https://github.com/PhilJay/MPAndroidChart>
+		* 首先在android studio里为MPAndroidChart库添加依赖项
+			* 在project层的build.gradle中添加
+
+				```gradle
+				allprojects {
+				    repositories {
+				        maven { url "https://jitpack.io" }
+				    }
+				}
+				```
+
+			* 在app层的build.gradle中添加
+
+				```gradle
+				dependencies {
+					compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+				}
+				```
+
+		* 先做一个简单的条形图试验
+			* 为你的BarChart生成视图
+				* xml
+
+					```xml
+				    <com.github.mikephil.charting.charts.BarChart
+				        android:id="@+id/chart0"
+				        android:layout_width="match_parent"
+				        android:layout_height="match_parent"
+				        />
+					```
+
+				* java
+
+					```java
+					BarChart mBarChart = (BarChart) findViewById(R.id.chart0);
+					```
+
+			* 添加数据
+
+				```java
+				List<BarEntry> entries = new ArrayList<>();
+			        entries.add(new BarEntry(0f, 30f));
+			        entries.add(new BarEntry(1f, 80f));
+			        entries.add(new BarEntry(2f, 60f));
+			        entries.add(new BarEntry(3f, 50f));
+			        // gap of 2f
+			        entries.add(new BarEntry(5f, 70f));
+			        entries.add(new BarEntry(6f, 60f));
+
+		        BarDataSet set = new BarDataSet(entries, "total");
+
+		        BarData data = new BarData(set);
+		        data.setBarWidth(0.9f); // set custom bar width
+		        mBarChart.setPinchZoom(false);
+		        mBarChart.setDrawGridBackground(false);
+		        mBarChart.setDrawBarShadow(false);
+		        mBarChart.setDrawValueAboveBar(true);
+		        mBarChart.setData(data);
+		        mBarChart.setFitBars(true); // make the x-axis fit exactly all bars
+		        mBarChart.invalidate(); // refresh
+				```
+		* 开始做分组条形图
+			* 添加数据
+
+				```java
+				List<BarEntry> entries0 = new ArrayList<>();
+		        List<BarEntry> entries1 = new ArrayList<>();
+		        List<BarEntry> entries2 = new ArrayList<>();
+		        for(int i = 0; i< 4; ++ i){
+		            entries0.add(new BarEntry(i,RecordLab.get(getApplicationContext()).getTotal_month(i)));
+		            entries1.add(new BarEntry(i,
+		                    RecordLab.get(getApplicationContext()).getTotal_month(i) -
+		                    RecordLab.get(getApplicationContext()).getTotal_others(i)));
+		            entries2.add(new BarEntry(i,RecordLab.get(getApplicationContext()).getTotal_others(i)));
+		        }
+
+		        BarDataSet set0 = new BarDataSet(entries0, "total");
+		        BarDataSet set1 = new BarDataSet(entries1, "meal");
+		        BarDataSet set2 = new BarDataSet(entries2, "others");
+				```
+
+			* 设置组间距离,条形图间距,条形图宽度(需要计算)
+
+				![grouped_barChart](https://github.com/PhilJay/MPAndroidChart/blob/master/screenshots/grouped_barchart_wiki.png)
+
+				```java
+				float groupSpace = 0.07f;
+		        float barSpace = 0.03f; // x3 dataset
+		        float barWidth = 0.28f; // x3 dataset
+		        // (0.03 + 0.28) * 3 + 0.07 = 1.00 -> interval per "group"
+
+		        BarData data = new BarData(set0,set1,set2);
+		        data.setBarWidth(barWidth);
+		        data.setValueFormatter(new IValueFormatter(){
+		            @Override
+		            public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+		                                            ViewPortHandler viewPortHandler) {
+		                return String.valueOf(Math.round(value));
+		            }
+		        });
+		        mBarChart.setData(data);
+		        mBarChart.groupBars(0,groupSpace,barSpace);
+		        mBarChart.invalidate(); // refresh
+				```
+
+			* 设置横纵轴(其中MyXAxisValueFormatter用于格式化横轴显示值)
+
+				```java
+				IAxisValueFormatter xAxisFormatter = new MyXAxisValueFormatter(getApplicationContext());
+
+		        XAxis xAxis= mBarChart.getXAxis();
+		        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+		        xAxis.setDrawGridLines(true);
+		        xAxis.setAxisMinimum(0);
+		        xAxis.setAxisMaximum(4);
+		        xAxis.setGranularity(1f);
+		        xAxis.setLabelCount(5);
+		        xAxis.setValueFormatter(xAxisFormatter);
+		        xAxis.setCenterAxisLabels(true);
+
+		        YAxis leftAxis = mBarChart.getAxisLeft();
+		        leftAxis.setDrawGridLines(true); // no grid lines
+		        mBarChart.getAxisRight().setEnabled(false); // no right axis
+				```
+
+			* 为各个条形图设置颜色
+				* 方法一
+
+					```java
+					set0.setColors(ColorTemplate.COLORFUL_COLORS);
+			        set1.setColors(ColorTemplate.COLORFUL_COLORS);
+			        set2.setColors(ColorTemplate.COLORFUL_COLORS);
+					```
+
+				* 方法二(各原色数值可以在<http://www.w3schools.com/colors/colors_rgb.asp>根据喜好得到)
+
+					```java
+					set0.setColor(Color.rgb(104, 241, 175));
+					...
+					```
+
+			* 为图表设置动画
+
+				```java
+				mBarChart.animateXY(1000,1000);
+				```
+
+			* 更多设置见<https://github.com/PhilJay/MPAndroidChart/wiki>
+
+		* 开始做折线图
+			* xml
+
+				```xml
+				<com.github.mikephil.charting.charts.LineChart
+		        android:id="@+id/chart1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        />
+				```
+
+			* 发现要在一个activity上显示多个chart需要使用listView,明天再写
 
 
 

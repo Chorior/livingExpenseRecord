@@ -121,7 +121,7 @@ public class RecordFragment extends Fragment {
                             mDinnerField.setText(String.valueOf(r.getmDinner()));
                         }
                     }
-                    if(0 != r.getmDinner()) {
+                    if(0 != r.getmOthers()) {
                         if(null != mOthersField){
                             mOthersField.setText(String.valueOf(r.getmOthers()));
                         }
