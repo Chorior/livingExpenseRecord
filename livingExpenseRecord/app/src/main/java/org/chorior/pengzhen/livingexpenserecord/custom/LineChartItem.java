@@ -69,6 +69,12 @@ public class LineChartItem extends ChartItem {
         leftAxis.setLabelCount(5);
         holder.chart.getAxisRight().setEnabled(false); // no right axis
 
+        MyMarkerView mv = new MyMarkerView(valueFormatter.getMyContext(),
+                R.layout.marker_view,
+                valueFormatter.getMyIndex());
+        mv.setChartView(holder.chart);
+        holder.chart.setMarker(mv);
+
         // set data
         holder.chart.setData((LineData) mChartData);
 

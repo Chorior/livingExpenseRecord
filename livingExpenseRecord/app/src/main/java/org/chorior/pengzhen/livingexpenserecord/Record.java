@@ -127,7 +127,11 @@ public class Record extends Object {
     }
 
     public String getDay(){
-        return DateFormat.format("mmdd",mDate).toString();
+        return String.valueOf(
+                Integer.parseInt(
+                        DateFormat.format("dd",mDate).toString()
+                )
+        );
     }
 
     public static Comparator<Record> DateComparator

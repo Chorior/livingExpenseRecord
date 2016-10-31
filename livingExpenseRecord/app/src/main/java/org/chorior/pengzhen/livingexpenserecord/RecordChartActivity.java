@@ -9,18 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.formatter.IValueFormatter;
@@ -48,11 +42,6 @@ public class RecordChartActivity extends Activity{
         float barWidth;
     }
 
-    private static class LineChartParameters{
-        float miniNum;
-        float maxiNum;
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,30 +57,13 @@ public class RecordChartActivity extends Activity{
         list.add(new GroupedBarChartItem(barData,getApplicationContext(),
                 gcp.FromX,gcp.groupSpace,gcp.barSpace));
 
-        LineChartParameters lcp = new LineChartParameters();
-        if(1 < RecordLab.get(getApplication()).getmRecords_month0().size()) {
-            list.add(new LineChartItem(
-                    generateDataLine(RecordLab.get(getApplication()).getmRecords_month0(), 0),
-                    new MyLineChartXAxisValueFormatter(getApplicationContext(),0)
-            ));
-        }
-        if(1 < RecordLab.get(getApplication()).getmRecords_month1().size()) {
-            list.add(new LineChartItem(
-                    generateDataLine(RecordLab.get(getApplication()).getmRecords_month1(), 1),
-                    new MyLineChartXAxisValueFormatter(getApplicationContext(),1)
-            ));
-        }
-        if(1 < RecordLab.get(getApplication()).getmRecords_month2().size()) {
-            list.add(new LineChartItem(
-                    generateDataLine(RecordLab.get(getApplication()).getmRecords_month2(), 2),
-                    new MyLineChartXAxisValueFormatter(getApplicationContext(),2)
-            ));
-        }
-        if(1 < RecordLab.get(getApplication()).getmRecords_month3().size()) {
-            list.add(new LineChartItem(
-                    generateDataLine(RecordLab.get(getApplication()).getmRecords_month3(), 3),
-                    new MyLineChartXAxisValueFormatter(getApplicationContext(),3)
-            ));
+        for(int i = 0; i < 4; ++ i){
+            if(1 < RecordLab.get(getApplication()).getmRecords_month(i).size()){
+                list.add(new LineChartItem(
+                        generateDataLine(RecordLab.get(getApplication()).getmRecords_month(i),i),
+                        new MyLineChartXAxisValueFormatter(getApplicationContext(),i)
+                ));
+            }
         }
 
         ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
@@ -171,7 +143,7 @@ public class RecordChartActivity extends Activity{
         for(int i = 0; i < mRecords_month.size(); ++ i){
             entries.add(new Entry(
                     i,
-                    mRecords_month.get(i).getmTotal_today()
+                    mRecords_month.get(mRecords_month.size() - 1 - i).getmTotal_today()
             ));
         }
 

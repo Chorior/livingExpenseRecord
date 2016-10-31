@@ -163,22 +163,6 @@ public class RecordLab {
         return "";
     }
 
-    public ArrayList<Record> getmRecords_month0() {
-        return mRecords_month0;
-    }
-
-    public ArrayList<Record> getmRecords_month1() {
-        return mRecords_month1;
-    }
-
-    public ArrayList<Record> getmRecords_month2() {
-        return mRecords_month2;
-    }
-
-    public ArrayList<Record> getmRecords_month3() {
-        return mRecords_month3;
-    }
-
     public ArrayList<Record> getmRecords_month(int index){
         switch(index){
             case 0:
