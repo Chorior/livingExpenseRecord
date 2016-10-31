@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.chorior.pengzhen.livingexpenserecord.R;
 
@@ -17,12 +19,12 @@ import org.chorior.pengzhen.livingexpenserecord.R;
  */
 
 public class LineChartItem extends ChartItem {
-    //private Context context;
+    private MyLineChartXAxisValueFormatter valueFormatter;
 
-    public LineChartItem(ChartData<?> cd) {
+    public LineChartItem(ChartData<?> cd, MyLineChartXAxisValueFormatter valueFormatter) {
         super(cd);
 
-        //this.context = context;
+        this.valueFormatter = valueFormatter;
     }
 
     @Override
@@ -59,8 +61,8 @@ public class LineChartItem extends ChartItem {
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
         xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(31f);
         xAxis.setGranularity(1f);
+        xAxis.setValueFormatter(valueFormatter);
 
         YAxis leftAxis = holder.chart.getAxisLeft();
         leftAxis.setDrawGridLines(true); // no grid lines

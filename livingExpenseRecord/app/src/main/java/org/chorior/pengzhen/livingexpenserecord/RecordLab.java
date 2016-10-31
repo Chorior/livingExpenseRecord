@@ -179,4 +179,19 @@ public class RecordLab {
         return mRecords_month3;
     }
 
+    public ArrayList<Record> getmRecords_month(int index){
+        switch(index){
+            case 0:
+                return mRecords_month0;
+            case 1:
+                return mRecords_month1;
+            case 2:
+                return mRecords_month2;
+            case 3:
+                return mRecords_month3;
+            default:
+                return null;
+        }
+    }
+
 }
