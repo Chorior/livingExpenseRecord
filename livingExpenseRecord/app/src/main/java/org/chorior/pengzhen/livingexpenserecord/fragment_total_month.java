@@ -13,7 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by pengzhen on 20/10/16.
@@ -65,30 +68,45 @@ public class fragment_total_month extends Fragment {
         }
         if(null != record_month2){
             if(RecordLab.get(getActivity()).getRecord_Months(2).equals("")){
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH,-1);
-
-                record_month2.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                try {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM",Locale.ENGLISH);
+                    cal.setTime(sdf.parse(record_month3.getText().toString()));
+                    cal.add(Calendar.MONTH,-1);
+                    record_month2.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }else{
                 record_month2.setText(RecordLab.get(getActivity()).getRecord_Months(2));
             }
         }
         if(null != record_month1){
             if(RecordLab.get(getActivity()).getRecord_Months(1).equals("")){
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH,-2);
-
-                record_month1.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                try {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM",Locale.ENGLISH);
+                    cal.setTime(sdf.parse(record_month2.getText().toString()));
+                    cal.add(Calendar.MONTH,-1);
+                    record_month1.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }else{
                 record_month1.setText(RecordLab.get(getActivity()).getRecord_Months(1));
             }
         }
         if(null != record_month0){
             if(RecordLab.get(getActivity()).getRecord_Months(0).equals("")){
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH,-3);
-
-                record_month0.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                try {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM",Locale.ENGLISH);
+                    cal.setTime(sdf.parse(record_month1.getText().toString()));
+                    cal.add(Calendar.MONTH,-1);
+                    record_month0.setText(DateFormat.format("yyyyMM",cal.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }else{
                 record_month0.setText(RecordLab.get(getActivity()).getRecord_Months(0));
             }
