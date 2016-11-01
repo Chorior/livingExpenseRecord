@@ -83,24 +83,24 @@ public class RecordActivity extends AppCompatActivity {
                         Date date = new Date();
                         setTitle(DateFormat.format("yyyy-MM-dd",date));
                         mRecord_fragment.updateRecordFragmentView();
-                        dots.get(0).setImageResource(R.drawable.ic_dot_selected);
-                        dots.get(1).setImageResource(R.drawable.ic_dot_normal);
-                        dots.get(2).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(0).setImageResource(R.drawable.dot_selected4);
+                        dots.get(1).setImageResource(R.drawable.dot_normal1);
+                        dots.get(2).setImageResource(R.drawable.dot_normal1);
                         break;
                     case 1:
                         setTitle(R.string.record_list_title);
                         mRecordListFragment.refreshData();
-                        dots.get(0).setImageResource(R.drawable.ic_dot_normal);
-                        dots.get(1).setImageResource(R.drawable.ic_dot_selected);
-                        dots.get(2).setImageResource(R.drawable.ic_dot_normal);
+                        dots.get(0).setImageResource(R.drawable.dot_normal1);
+                        dots.get(1).setImageResource(R.drawable.dot_selected4);
+                        dots.get(2).setImageResource(R.drawable.dot_normal1);
                         break;
                     case 2:
                         setTitle(R.string.total_month_title);
                         RecordLab.get(getApplicationContext()).updateRecords();
                         mFragment_total_month.updateTextView();
-                        dots.get(0).setImageResource(R.drawable.ic_dot_normal);
-                        dots.get(1).setImageResource(R.drawable.ic_dot_normal);
-                        dots.get(2).setImageResource(R.drawable.ic_dot_selected);
+                        dots.get(0).setImageResource(R.drawable.dot_normal1);
+                        dots.get(1).setImageResource(R.drawable.dot_normal1);
+                        dots.get(2).setImageResource(R.drawable.dot_selected4);
                         break;
                     default:
                 }
@@ -121,22 +121,22 @@ public class RecordActivity extends AppCompatActivity {
             case 0:
                 Date date = new Date();
                 setTitle(DateFormat.format("yyyy-MM-dd",date));
-                dots.get(0).setImageResource(R.drawable.ic_dot_selected);
-                dots.get(1).setImageResource(R.drawable.ic_dot_normal);
-                dots.get(2).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(0).setImageResource(R.drawable.dot_selected4);
+                dots.get(1).setImageResource(R.drawable.dot_normal1);
+                dots.get(2).setImageResource(R.drawable.dot_normal1);
                 break;
             case 1:
                 setTitle(R.string.record_list_title);
-                dots.get(0).setImageResource(R.drawable.ic_dot_normal);
-                dots.get(1).setImageResource(R.drawable.ic_dot_selected);
-                dots.get(2).setImageResource(R.drawable.ic_dot_normal);
+                dots.get(0).setImageResource(R.drawable.dot_normal1);
+                dots.get(1).setImageResource(R.drawable.dot_selected4);
+                dots.get(2).setImageResource(R.drawable.dot_normal1);
                 break;
             case 2:
                 setTitle(R.string.total_month_title);
                 RecordLab.get(getApplicationContext()).updateRecords();
-                dots.get(0).setImageResource(R.drawable.ic_dot_normal);
-                dots.get(1).setImageResource(R.drawable.ic_dot_normal);
-                dots.get(2).setImageResource(R.drawable.ic_dot_selected);
+                dots.get(0).setImageResource(R.drawable.dot_normal1);
+                dots.get(1).setImageResource(R.drawable.dot_normal1);
+                dots.get(2).setImageResource(R.drawable.dot_selected4);
                 break;
             default:
         }
