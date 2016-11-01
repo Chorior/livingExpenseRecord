@@ -2,7 +2,7 @@
 an Android app for recording living expense
 ---
 
-* [livingExpenseRecord]((https://github.com/Chorior/livingExpenseRecord/blob/release/image/demo.gif))是一个简单的主要用于记录三餐消费情况的android app;
+* [livingExpenseRecord](https://github.com/Chorior/livingExpenseRecord/blob/release/image/demo.gif)是一个简单的主要用于记录三餐消费情况的android app;
 	* 由于[演示gif](https://github.com/Chorior/livingExpenseRecord/blob/release/image/demo.gif)内容过大,所以请自行下载查看;
 * 优点
 	* 简单无广告,不用联网,拿出手机就能用;
