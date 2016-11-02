@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Livingexpenserecord by Chorior</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/Chorior/livingExpenseRecord">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Livingexpenserecord</h1>
+            <h2>an Android app for recording living expense</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/Chorior/livingExpenseRecord/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/Chorior/livingExpenseRecord/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>
+<a id="livingexpenserecord" class="anchor" href="#livingexpenserecord" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>livingExpenseRecord</h1>
+
+<h2>
+<a id="an-android-app-for-recording-living-expense" class="anchor" href="#an-android-app-for-recording-living-expense" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>an Android app for recording living expense</h2>
+
+<ul>
+<li>livingExpenseRecord是一个简单的主要用于记录三餐消费情况的android app;</li>
+<li>优点
+
+<ul>
+<li>简单无广告,不用联网,拿出手机就能用;</li>
+<li>最多记录过去三个月的消费情况,绝对不会有垃圾数据占用存储量;</li>
+<li>有图表统计显示数据分布,每月每天的三餐消费一目了然;</li>
+</ul>
+</li>
+<li>缺点
+
+<ul>
+<li>可以通过修改系统时间回到过去修改消费记录;</li>
+<li>底部的小圆点在打开输入法的时候会升上来;</li>
+<li>界面不够优美;</li>
+</ul>
+</li>
+<li>资料、依赖库及IDE
+
+<ul>
+<li>Android编程权威指南</li>
+<li><a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a></li>
+<li>Android studio 2.2</li>
+<li>yED Grahp Editor 3.16.1</li>
+</ul>
+</li>
+<li>该app涉及到的android知识
+
+<ul>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/useFragment.md">如何使用Fragment</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/useListView.md">ListView的使用</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/Fragment2Activity.md">如何从fragment启动Activity并传递信息</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/useViewPager.md">ViewPager的使用</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/addOptionsMenu.md">添加选项菜单</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/useNavUtils.md">菜单栏添加向上导航菜单</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/SaveDataLocally.md">本地数据的存储和读取</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/ChoiceMode_ListView.md">ListView的上下文操作实现批量删除</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/addDots.md">为ViewPager添加底部小圆点导航</a>;</li>
+<li>
+<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/docs/useMPAndroidChart.md">MPAndroidChart库的基本使用</a>;</li>
+</ul>
+</li>
+<li>后记
+
+<ul>
+<li>这个app<a href="https://github.com/Chorior/livingExpenseRecord/blob/release/image/requirements.png">最初的需求</a>是这样的;</li>
+<li>后来因为自定义项与三餐冲突了,所以改成了others;</li>
+<li>文本日记应该没人会写,所以取消了;</li>
+<li>推送感觉挺讨厌的,不过做了图表;</li>
+<li>我不是专业的android程序员,写的不好的地方请见凉;</li>
+</ul>
+</li>
+</ul>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
+
+<pre><code>Copyright 2016 Chorior
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/Chorior">Chorior</a> can be found on <a href="https://github.com/Chorior/livingExpenseRecord">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="https://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
