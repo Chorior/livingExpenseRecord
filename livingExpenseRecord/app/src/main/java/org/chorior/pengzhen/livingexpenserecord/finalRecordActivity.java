@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 
+import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,11 +39,11 @@ public class finalRecordActivity extends AppCompatActivity {
             }
         }
 
-        mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
         mRecords = RecordLab.get(this).getRecords();
-
         FragmentManager fm = getSupportFragmentManager();
 
+        mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
+        mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {

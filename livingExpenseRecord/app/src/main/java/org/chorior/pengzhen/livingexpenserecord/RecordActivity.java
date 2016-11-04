@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +60,7 @@ public class RecordActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setOffscreenPageLimit(mFragmentList.size());
+        mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
