@@ -57,7 +57,7 @@ public class RecordChartActivity extends Activity{
         list.add(new GroupedBarChartItem(barData,getApplicationContext(),
                 gcp.FromX,gcp.groupSpace,gcp.barSpace));
 
-        for(int i = 0; i < 4; ++ i){
+        for(int i = 3; i >= 0; -- i){
             if(1 < RecordLab.get(getApplication()).getmRecords_month(i).size()){
                 list.add(new LineChartItem(
                         generateDataLine(RecordLab.get(getApplication()).getmRecords_month(i),i),

@@ -117,12 +117,12 @@ public class RecordLab {
 
             int index_totalMonth = 3;
             ArrayList<Record> temp_records_month = mRecords_month3;
-            String str_temp = mRecords.get(mRecords.size() - 1).getYearAndMonthDate();
-            for(int i = mRecords.size() - 1; i >= 0; -- i){
+            String str_temp = mRecords.get(0).getYearAndMonthDate();
+            for(int i = 0; i < mRecords.size(); ++ i){
                 if(!str_temp.equals(mRecords.get(i).getYearAndMonthDate())){
                     -- index_totalMonth;
                     if(0 > index_totalMonth){
-                        mRecords.subList(0,i + 1).clear();
+                        mRecords.subList(i,mRecords.size()).clear();
                         return;
                     }
                     str_temp = mRecords.get(i).getYearAndMonthDate();

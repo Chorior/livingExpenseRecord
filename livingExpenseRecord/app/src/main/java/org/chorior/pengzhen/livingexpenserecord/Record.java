@@ -138,7 +138,7 @@ public class Record extends Object {
             = new Comparator<Record>() {
         @Override
         public int compare(Record o1, Record o2) {
-            return o1.mDate.compareTo(o2.mDate);
+            return o2.mDate.compareTo(o1.mDate);
         }
     };
 }
