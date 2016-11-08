@@ -17,4 +17,7 @@
     <string name="empty_text">No data!</string>
     <string name="total_month_title">Total</string>
     <string name="chart">chart</string>
+    <string name="title_page0">TODAY</string>
+    <string name="title_page1">LIST</string>
+    <string name="title_page2">TOTAL</string>
 </resources>

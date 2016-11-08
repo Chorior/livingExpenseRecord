@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.support.design.widget.TabLayout;
 
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
 
@@ -31,7 +32,6 @@ public class RecordActivity extends AppCompatActivity {
         if(null != savedInstanceState){
             savedIndex = savedInstanceState.getInt(KEY_INDEX);
         }
-
 
 
         mRecord_fragment = new RecordFragment();
@@ -59,6 +59,20 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return mFragmentList.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                switch(position){
+                    case 0:
+                        return getString(R.string.title_page0);
+                    case 1:
+                        return getString(R.string.title_page1);
+                    case 2:
+                        return getString(R.string.title_page2);
+                    default:
+                        return null;
+                }
             }
         });
 
@@ -94,6 +108,10 @@ public class RecordActivity extends AppCompatActivity {
 
             }
         });
+
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
     @Override
