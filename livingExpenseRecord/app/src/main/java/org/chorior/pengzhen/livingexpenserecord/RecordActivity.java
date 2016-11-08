@@ -33,6 +33,7 @@ public class RecordActivity extends AppCompatActivity {
             savedIndex = savedInstanceState.getInt(KEY_INDEX);
         }
 
+        getSupportActionBar().setElevation(0);
 
         mRecord_fragment = new RecordFragment();
         mRecordListFragment = new RecordListFragment();
