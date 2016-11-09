@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -63,7 +64,7 @@ public class RecordFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_item_save_record:
-
+                Toast.makeText(getActivity(), R.string.saved_toast, Toast.LENGTH_SHORT).show();
                 mRecord.setmDate(new Date());
 
                 if(0 != mBreakfastField.getText().length()) {
