@@ -1,6 +1,7 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.support.design.widget.TabLayout;
+import android.view.MenuItem;
 
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class RecordActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
+    private NavigationView mNavigationView;
     private RecordFragment mRecord_fragment;
     private RecordListFragment mRecordListFragment;
     private fragment_total_month mFragment_total_month;
@@ -32,8 +35,20 @@ public class RecordActivity extends AppCompatActivity {
         if(null != savedInstanceState){
             savedIndex = savedInstanceState.getInt(KEY_INDEX);
         }
-
         getSupportActionBar().setElevation(0);
+
+        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.navi_item_animation:
+                        break;
+                    default:
+                }
+                return false;
+            }
+        });
 
         mRecord_fragment = new RecordFragment();
         mRecordListFragment = new RecordListFragment();

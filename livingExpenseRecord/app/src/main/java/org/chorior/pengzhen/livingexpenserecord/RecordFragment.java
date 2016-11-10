@@ -25,7 +25,7 @@ public class RecordFragment extends Fragment {
     private EditText mDinnerField;
     private EditText mOthersField;
     private TextView mTotal_today;
-    private final String str_total_today_prefix = "TOTAL ";
+    private final String str_total_today_prefix = "总计 ";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
