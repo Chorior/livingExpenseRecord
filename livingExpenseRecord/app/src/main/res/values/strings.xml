@@ -30,4 +30,6 @@
     <string name="theme">主题</string>
     <string name="background">背景</string>
     <string name="animation">切换效果</string>
+    <string name="navi_open">打开导航栏</string>
+    <string name="navi_close">关闭导航栏</string>
 </resources>
