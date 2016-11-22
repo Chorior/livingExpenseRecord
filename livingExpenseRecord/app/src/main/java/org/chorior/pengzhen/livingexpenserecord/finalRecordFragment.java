@@ -19,11 +19,6 @@ public class finalRecordFragment extends Fragment {
             "org.chorior.pengzhen.recordIntent.record_date";
 
     private Record mRecord;
-    private TextView mBreakfast;
-    private TextView mLunch;
-    private TextView mDinner;
-    private TextView mOthers;
-    private TextView mTotal_today;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -42,19 +37,19 @@ public class finalRecordFragment extends Fragment {
     {
         View v = inflater.inflate(R.layout.fragment_record_final,parent,false);
 
-        mBreakfast = (TextView)v.findViewById(R.id.record_breakfast_final);
+        TextView mBreakfast = (TextView)v.findViewById(R.id.record_breakfast_final);
         mBreakfast.setText(String.valueOf(mRecord.getmBreakfast()));
 
-        mLunch = (TextView)v.findViewById(R.id.record_lunch_final);
+        TextView mLunch = (TextView)v.findViewById(R.id.record_lunch_final);
         mLunch.setText(String.valueOf(mRecord.getmLunch()));
 
-        mDinner = (TextView)v.findViewById(R.id.record_dinner_final);
+        TextView mDinner = (TextView)v.findViewById(R.id.record_dinner_final);
         mDinner.setText(String.valueOf(mRecord.getmDinner()));
 
-        mOthers = (TextView)v.findViewById(R.id.record_others_final);
+        TextView mOthers = (TextView)v.findViewById(R.id.record_others_final);
         mOthers.setText(String.valueOf(mRecord.getmOthers()));
 
-        mTotal_today = (TextView)v.findViewById(R.id.record_total_today_final);
+        TextView mTotal_today = (TextView)v.findViewById(R.id.record_total_today_final);
         mTotal_today.setText(String.valueOf(mRecord.getmTotal_today()));
 
         return v;

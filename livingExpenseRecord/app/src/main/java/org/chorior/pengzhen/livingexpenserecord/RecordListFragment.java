@@ -27,7 +27,6 @@ import java.util.ArrayList;
  */
 
 public class RecordListFragment extends ListFragment {
-    private ArrayList<Record> mRecords;
     private RecordAdapter adapter;
 
     private class RecordAdapter extends ArrayAdapter<Record>{
@@ -63,7 +62,7 @@ public class RecordListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRecords = RecordLab.get(getActivity()).getRecords();
+        ArrayList<Record> mRecords = RecordLab.get(getActivity()).getRecords();
         adapter = new RecordAdapter(mRecords);
         setListAdapter(adapter);
     }
@@ -72,7 +71,7 @@ public class RecordListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        if(null != v.findViewById(android.R.id.list)){
+        if(null != v){
             ListView listView = (ListView)v.findViewById(android.R.id.list);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
                 // Use contextual action bar on device

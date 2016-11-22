@@ -3,6 +3,7 @@ package org.chorior.pengzhen.livingexpenserecord;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,7 @@ public class RecordChartActivity extends Activity{
         }
 
         @Override
+        @NonNull
         public View getView(int position, View convertView, ViewGroup parent) {
             return getItem(position).getView(position, convertView, getContext());
         }

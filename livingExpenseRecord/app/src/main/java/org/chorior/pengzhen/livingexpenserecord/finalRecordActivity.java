@@ -1,7 +1,5 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,10 +22,8 @@ import java.util.Date;
  */
 
 public class finalRecordActivity extends AppCompatActivity {
-    private ViewPager mViewPager;
     private ArrayList<Record> mRecords;
 
-    @TargetApi(11)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -36,17 +32,14 @@ public class finalRecordActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setElevation(0);
         setSupportActionBar(mToolbar);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-            if(null != NavUtils.getParentActivityName(this)){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
+        if(null != getSupportActionBar()){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         mRecords = RecordLab.get(this).getRecords();
         FragmentManager fm = getSupportFragmentManager();
 
-        mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
+        ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
         mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override

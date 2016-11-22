@@ -1,8 +1,8 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.support.design.widget.TabLayout;
 import android.view.MenuItem;
 
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
@@ -23,9 +22,7 @@ import java.util.List;
 
 public class RecordActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
     private ViewPager mViewPager;
-    private NavigationView mNavigationView;
     private RecordFragment mRecord_fragment;
     private RecordListFragment mRecordListFragment;
     private fragment_total_month mFragment_total_month;
@@ -41,18 +38,16 @@ public class RecordActivity extends AppCompatActivity {
             savedIndex = savedInstanceState.getInt(KEY_INDEX);
         }
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(Build.VERSION.SDK_INT >= 24) {
-            mToolbar.setElevation(0);
-        }
+        mToolbar.setElevation(0);
         setSupportActionBar(mToolbar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                 R.string.navi_open, R.string.navi_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
+        NavigationView mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
