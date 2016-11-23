@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 
+import org.chorior.pengzhen.livingexpenserecord.custom.JazzyViewPager;
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class RecordActivity extends AppCompatActivity {
 
-    private ViewPager mViewPager;
+    private JazzyViewPager mViewPager;
     private RecordFragment mRecord_fragment;
     private RecordListFragment mRecordListFragment;
     private fragment_total_month mFragment_total_month;
@@ -64,7 +65,7 @@ public class RecordActivity extends AppCompatActivity {
         mRecordListFragment = new RecordListFragment();
         mFragment_total_month = new fragment_total_month();
 
-        mViewPager = (ViewPager)findViewById(R.id.viewPager);
+        mViewPager = (JazzyViewPager)findViewById(R.id.viewPager);
         Fragment fragment0 = mRecord_fragment;
         Fragment fragment1 = mRecordListFragment;
         Fragment fragment2 = mFragment_total_month;
@@ -75,7 +76,9 @@ public class RecordActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setOffscreenPageLimit(mFragmentList.size());
-        mViewPager.setPageTransformer(true, new MyPageTransformer());
+        mViewPager.setTransitionEffect(JazzyViewPager.TransitionEffect.Stack);
+        mViewPager.setPageMargin(30);
+        //mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
