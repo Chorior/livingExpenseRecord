@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/navi_header"
+        android:background="@drawable/rsz_navi_header"
         android:scaleType="centerCrop"/>
 
     <ImageView
@@ -16,7 +16,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="36dp"
         android:padding="8dp"
-        android:src="@drawable/ic_avatar"/>
+        android:src="@drawable/rsz_ic_avatar"/>
 
     <TextView
         android:layout_width="match_parent"
