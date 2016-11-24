@@ -12,10 +12,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MenuItem;
 
 import org.chorior.pengzhen.livingexpenserecord.custom.JazzyViewPager;
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
+import org.chorior.pengzhen.livingexpenserecord.custom.NaviAnimationDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +25,7 @@ import java.util.List;
 
 public class RecordActivity extends AppCompatActivity {
 
+    private Toolbar mToolbar;
     private JazzyViewPager mViewPager;
     private RecordFragment mRecord_fragment;
     private RecordListFragment mRecordListFragment;
@@ -30,6 +33,10 @@ public class RecordActivity extends AppCompatActivity {
     private List<Fragment> mFragmentList = new ArrayList<>();;
     private static final String KEY_INDEX = "index";
     private int savedIndex = 0;
+    private NaviSelection mNaviSelection;
+    private RecordJSONSerializer mSerializer;
+
+    private static final String FILENAME = "NaviSelection.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +45,60 @@ public class RecordActivity extends AppCompatActivity {
         if(null != savedInstanceState){
             savedIndex = savedInstanceState.getInt(KEY_INDEX);
         }
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        initToolbar();
+        initFragmentList();
+        initNaviSelection();
+        initNavigationView();
+        initJazzyViewPager();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewPager.setCurrentItem(savedIndex);
+        switch(savedIndex){
+            case 0:
+                Date date = new Date();
+                setTitle(DateFormat.format("yyyy-MM-dd",date));
+                break;
+            case 1:
+                setTitle(R.string.record_list_title);
+                break;
+            case 2:
+                setTitle(R.string.total_month_title);
+                RecordLab.get(getApplicationContext()).updateRecords();
+                break;
+            default:
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        savedIndex = mViewPager.getCurrentItem();
+        RecordLab.get(getApplicationContext()).saveRecords();
+        try {
+            mSerializer.saveNaviSelection(mNaviSelection);
+        }catch (Exception e){
+            Log.e("error",e.toString());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(null != mViewPager){
+            outState.putInt(KEY_INDEX,mViewPager.getCurrentItem());
+        }
+    }
+
+    public void initToolbar(){
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setElevation(0);
         setSupportActionBar(mToolbar);
+    }
 
+    public void initNavigationView(){
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                 R.string.navi_open, R.string.navi_close);
@@ -54,18 +111,22 @@ public class RecordActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navi_item_animation:
-                        break;
+                        NaviAnimationDialogFragment dialog = NaviAnimationDialogFragment
+                                .newInstance(mNaviSelection.getAnimation());
+                        dialog.show(getFragmentManager(),"animation");
+                        return true;
                     default:
                 }
                 return false;
             }
         });
+    }
 
+    public void initFragmentList(){
         mRecord_fragment = new RecordFragment();
         mRecordListFragment = new RecordListFragment();
         mFragment_total_month = new fragment_total_month();
 
-        mViewPager = (JazzyViewPager)findViewById(R.id.viewPager);
         Fragment fragment0 = mRecord_fragment;
         Fragment fragment1 = mRecordListFragment;
         Fragment fragment2 = mFragment_total_month;
@@ -73,10 +134,15 @@ public class RecordActivity extends AppCompatActivity {
         mFragmentList.add(fragment0);
         mFragmentList.add(fragment1);
         mFragmentList.add(fragment2);
+    }
 
+    public void initJazzyViewPager(){
+        mViewPager = (JazzyViewPager)findViewById(R.id.viewPager);
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setOffscreenPageLimit(mFragmentList.size());
-        mViewPager.setTransitionEffect(JazzyViewPager.TransitionEffect.Stack);
+        mViewPager.setTransitionEffect(
+                JazzyViewPager.TransitionEffect.values()[mNaviSelection.getAnimation()]
+        );
         mViewPager.setPageMargin(30);
         //mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
@@ -143,38 +209,16 @@ public class RecordActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mViewPager.setCurrentItem(savedIndex);
-        switch(savedIndex){
-            case 0:
-                Date date = new Date();
-                setTitle(DateFormat.format("yyyy-MM-dd",date));
-                break;
-            case 1:
-                setTitle(R.string.record_list_title);
-                break;
-            case 2:
-                setTitle(R.string.total_month_title);
-                RecordLab.get(getApplicationContext()).updateRecords();
-                break;
-            default:
+    public void initNaviSelection(){
+        mSerializer = new RecordJSONSerializer(getApplicationContext(),FILENAME);
+        try{
+            mNaviSelection = mSerializer.loadNaviSelection();
+        }catch(Exception e){
+            mNaviSelection = new NaviSelection();
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        savedIndex = mViewPager.getCurrentItem();
-        RecordLab.get(getApplicationContext()).saveRecords();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(null != mViewPager){
-            outState.putInt(KEY_INDEX,mViewPager.getCurrentItem());
-        }
+    public void setAnimation(int id_animation){
+        mNaviSelection.setAnimation(id_animation);
     }
 }

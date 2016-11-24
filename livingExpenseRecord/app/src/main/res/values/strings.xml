@@ -32,6 +32,8 @@
     <string name="animation">切换效果</string>
     <string name="navi_open">opened</string>
     <string name="navi_close">closed</string>
+    <string name="animation_dialog_cancel">取消</string>
+    <string name="animation_dialog_ok">确认</string>
 
     <string-array name="jazzy_effects">
         <item>Standard</item>

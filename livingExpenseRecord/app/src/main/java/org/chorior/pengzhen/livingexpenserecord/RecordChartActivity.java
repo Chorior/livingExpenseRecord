@@ -48,27 +48,7 @@ public class RecordChartActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_chart);
         RecordLab.get(getApplicationContext()).updateRecords();
-
-        ListView lv = (ListView) findViewById(R.id.listView_chart);
-
-        List<ChartItem> list = new ArrayList<>();
-
-        GroupedChartParameters gcp = new GroupedChartParameters();
-        BarData barData = generateDataGroupedBar(gcp);
-        list.add(new GroupedBarChartItem(barData,getApplicationContext(),
-                gcp.FromX,gcp.groupSpace,gcp.barSpace));
-
-        for(int i = 3; i >= 0; -- i){
-            if(1 < RecordLab.get(getApplication()).getmRecords_month(i).size()){
-                list.add(new LineChartItem(
-                        generateDataLine(RecordLab.get(getApplication()).getmRecords_month(i),i),
-                        new MyLineChartXAxisValueFormatter(getApplicationContext(),i)
-                ));
-            }
-        }
-
-        ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
-        lv.setAdapter(cda);
+        initListView();
     }
 
     /** adapter that supports 3 different item types */
@@ -169,5 +149,24 @@ public class RecordChartActivity extends Activity{
         });
 
         return data;
+    }
+
+    public void initListView(){
+        ListView lv = (ListView) findViewById(R.id.listView_chart);
+        List<ChartItem> list = new ArrayList<>();
+        GroupedChartParameters gcp = new GroupedChartParameters();
+        BarData barData = generateDataGroupedBar(gcp);
+        list.add(new GroupedBarChartItem(barData,getApplicationContext(),
+                gcp.FromX,gcp.groupSpace,gcp.barSpace));
+        for(int i = 3; i >= 0; -- i){
+            if(1 < RecordLab.get(getApplication()).getmRecords_month(i).size()){
+                list.add(new LineChartItem(
+                        generateDataLine(RecordLab.get(getApplication()).getmRecords_month(i),i),
+                        new MyLineChartXAxisValueFormatter(getApplicationContext(),i)
+                ));
+            }
+        }
+        ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
+        lv.setAdapter(cda);
     }
 }

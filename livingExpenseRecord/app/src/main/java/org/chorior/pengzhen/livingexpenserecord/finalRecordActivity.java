@@ -29,16 +29,35 @@ public class finalRecordActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_final);
+        initToolbar();
+        initViewPager();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                if(null != NavUtils.getParentActivityName(this)){
+                    NavUtils.navigateUpFromSameTask(this);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void initToolbar(){
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setElevation(0);
         setSupportActionBar(mToolbar);
         if(null != getSupportActionBar()){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    public void initViewPager(){
         mRecords = RecordLab.get(this).getRecords();
         FragmentManager fm = getSupportFragmentManager();
-
         ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
         mViewPager.setPageTransformer(true, new MyPageTransformer());
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
@@ -47,23 +66,11 @@ public class finalRecordActivity extends AppCompatActivity {
                 Record record = mRecords.get(position);
                 return finalRecordFragment.newInstance(record.getmDate());
             }
-
             @Override
             public int getCount() {
                 return mRecords.size();
             }
         });
-
-        Date recordDate = (Date)getIntent()
-                .getSerializableExtra(finalRecordFragment.EXTRA_RECORD_DATE);
-        for(int i = 0; i < mRecords.size(); ++ i){
-            if(mRecords.get(i).getmDate().equals(recordDate)){
-                mViewPager.setCurrentItem(i);
-                setTitle(DateFormat.format("yyyy-MM-dd",recordDate));
-                break;
-            }
-        }
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -83,18 +90,14 @@ public class finalRecordActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case android.R.id.home:
-                if(null != NavUtils.getParentActivityName(this)){
-                    NavUtils.navigateUpFromSameTask(this);
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        Date recordDate = (Date)getIntent()
+                .getSerializableExtra(finalRecordFragment.EXTRA_RECORD_DATE);
+        for(int i = 0; i < mRecords.size(); ++ i){
+            if(mRecords.get(i).getmDate().equals(recordDate)){
+                mViewPager.setCurrentItem(i);
+                setTitle(DateFormat.format("yyyy-MM-dd",recordDate));
+                break;
+            }
         }
     }
 }
