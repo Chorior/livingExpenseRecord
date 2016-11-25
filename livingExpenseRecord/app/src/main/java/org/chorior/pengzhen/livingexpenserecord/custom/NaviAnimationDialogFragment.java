@@ -34,7 +34,7 @@ public class NaviAnimationDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.animation)
-                .setSingleChoiceItems(R.array.jazzy_effects, checkedItem,
+                .setSingleChoiceItems(R.array.translation_effect, checkedItem,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

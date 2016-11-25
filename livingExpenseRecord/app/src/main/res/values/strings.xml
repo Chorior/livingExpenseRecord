@@ -34,19 +34,18 @@
     <string name="navi_close">closed</string>
     <string name="animation_dialog_cancel">取消</string>
     <string name="animation_dialog_ok">确认</string>
-
-    <string-array name="jazzy_effects">
-        <item>Standard</item>
-        <item>Tablet</item>
+    <string-array name="translation_effect">
+        <item>Accordion</item>
         <item>CubeIn</item>
         <item>CubeOut</item>
-        <item>FlipVertical</item>
+        <item>Depth</item>
         <item>FlipHorizontal</item>
+        <item>FlipVertical</item>
+        <item>RotateDown</item>
+        <item>RotateUp</item>
         <item>Stack</item>
+        <item>Tablet</item>
         <item>ZoomIn</item>
         <item>ZoomOut</item>
-        <item>RotateUp</item>
-        <item>RotateDown</item>
-        <item>Accordion</item>
     </string-array>
 </resources>

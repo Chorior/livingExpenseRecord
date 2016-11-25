@@ -59,7 +59,7 @@ public class finalRecordActivity extends AppCompatActivity {
         mRecords = RecordLab.get(this).getRecords();
         FragmentManager fm = getSupportFragmentManager();
         ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
-        mViewPager.setPageTransformer(true, new MyPageTransformer());
+        mViewPager.setPageTransformer(true, new MyPageTransformer(MyPageTransformer.TransitionEffect.ZoomOut));
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {

@@ -15,7 +15,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
 
-import org.chorior.pengzhen.livingexpenserecord.custom.JazzyViewPager;
 import org.chorior.pengzhen.livingexpenserecord.custom.MyPageTransformer;
 import org.chorior.pengzhen.livingexpenserecord.custom.NaviAnimationDialogFragment;
 
@@ -26,7 +25,7 @@ import java.util.List;
 public class RecordActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private JazzyViewPager mViewPager;
+    private ViewPager mViewPager;
     private RecordFragment mRecord_fragment;
     private RecordListFragment mRecordListFragment;
     private fragment_total_month mFragment_total_month;
@@ -49,7 +48,7 @@ public class RecordActivity extends AppCompatActivity {
         initFragmentList();
         initNaviSelection();
         initNavigationView();
-        initJazzyViewPager();
+        initViewPager();
     }
 
     @Override
@@ -136,15 +135,14 @@ public class RecordActivity extends AppCompatActivity {
         mFragmentList.add(fragment2);
     }
 
-    public void initJazzyViewPager(){
-        mViewPager = (JazzyViewPager)findViewById(R.id.viewPager);
+    public void initViewPager(){
+        mViewPager = (ViewPager)findViewById(R.id.viewPager);
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setOffscreenPageLimit(mFragmentList.size());
-        mViewPager.setTransitionEffect(
-                JazzyViewPager.TransitionEffect.values()[mNaviSelection.getAnimation()]
-        );
-        mViewPager.setPageMargin(30);
-        //mViewPager.setPageTransformer(true, new MyPageTransformer());
+        mViewPager.setPageTransformer(true,
+                new MyPageTransformer(
+                        MyPageTransformer.TransitionEffect.values()[mNaviSelection.getAnimation()]
+                ));
         mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
@@ -220,5 +218,9 @@ public class RecordActivity extends AppCompatActivity {
 
     public void setAnimation(int id_animation){
         mNaviSelection.setAnimation(id_animation);
+        mViewPager.setPageTransformer(true,
+                new MyPageTransformer(
+                        MyPageTransformer.TransitionEffect.values()[mNaviSelection.getAnimation()]
+                ));
     }
 }
