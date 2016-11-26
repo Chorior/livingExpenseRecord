@@ -3,6 +3,7 @@ package org.chorior.pengzhen.livingexpenserecord.custom;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -146,104 +147,176 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
     }
 
     private void AccordionPageTransformer(View view, float position){
-        view.setPivotX(position < 0 ? 0 : view.getWidth());
-        view.setScaleX(position < 0 ? 1f + position : 1f - position);
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else if(position <= 0) {
+            view.setAlpha(1);
+            view.setPivotX(view.getWidth());
+            view.setScaleX(1f + position);
+        }else{
+            view.setAlpha(1);
+            view.setPivotX(0);
+            view.setScaleX(1f - position);
+        }
     }
 
     private void TabletPageTransformer(View view, float position){
-        final Matrix OFFSET_MATRIX = new Matrix();
-        final Camera OFFSET_CAMERA = new Camera();
-        final float[] OFFSET_TEMP_FLOAT = new float[2];
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else{
+            final Matrix OFFSET_MATRIX = new Matrix();
+            final Camera OFFSET_CAMERA = new Camera();
+            float[] OFFSET_TEMP_FLOAT = new float[2];
 
-        final float degrees = (position < 0 ? 30f : -30f) * Math.abs(position);
-        OFFSET_MATRIX.reset();
-        OFFSET_CAMERA.save();
-        OFFSET_CAMERA.rotateY(Math.abs(degrees));
-        OFFSET_CAMERA.getMatrix(OFFSET_MATRIX);
-        OFFSET_CAMERA.restore();
+            float degrees = (position < 0 ? 30f : -30f) * Math.abs(position);
+            OFFSET_MATRIX.reset();
+            OFFSET_CAMERA.save();
+            OFFSET_CAMERA.rotateY(Math.abs(degrees));
+            OFFSET_CAMERA.getMatrix(OFFSET_MATRIX);
+            OFFSET_CAMERA.restore();
 
-        OFFSET_MATRIX.preTranslate(- view.getWidth() * 0.5f, - view.getHeight() * 0.5f);
-        OFFSET_MATRIX.postTranslate(view.getWidth() * 0.5f, view.getHeight() * 0.5f);
-        OFFSET_TEMP_FLOAT[0] = view.getWidth();
-        OFFSET_TEMP_FLOAT[1] = view.getHeight();
-        OFFSET_MATRIX.mapPoints(OFFSET_TEMP_FLOAT);
-        final float translationX = (view.getWidth() - OFFSET_TEMP_FLOAT[0]) * (degrees > 0.0f ? 1.0f : -1.0f);
+            OFFSET_MATRIX.preTranslate(- view.getWidth() * 0.5f, - view.getHeight() * 0.5f);
+            OFFSET_MATRIX.postTranslate(view.getWidth() * 0.5f, view.getHeight() * 0.5f);
+            OFFSET_TEMP_FLOAT[0] = view.getWidth();
+            OFFSET_TEMP_FLOAT[1] = view.getHeight();
+            OFFSET_MATRIX.mapPoints(OFFSET_TEMP_FLOAT);
+            float translationX = (view.getWidth() - OFFSET_TEMP_FLOAT[0]) * (degrees > 0.0f ? 1.0f : -1.0f);
 
-        view.setTranslationX(translationX);
-        view.setPivotX(view.getWidth() * 0.5f);
-        view.setPivotY(0);
-        view.setRotationY(degrees);
+            view.setAlpha(1);
+            view.setTranslationX(translationX);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(0);
+            view.setRotationY(degrees);
+        }
+
     }
 
     private void CubeInPageTransformer(View view, float position){
         // Rotate the fragment on the left or right edge
-        view.setPivotX(position > 0 ? 0 : view.getWidth());
-        view.setPivotY(0);
-        view.setRotationY(-90f * position);
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else if(position <= 0){
+            view.setAlpha(1);
+            view.setPivotX(view.getWidth());
+            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationY(90f * position);
+        }else{
+            view.setAlpha(1);
+            view.setPivotX(0);
+            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationY(-90f * position);
+        }
     }
 
     private void CubeOutPageTransformer(View view, float position){
-        view.setPivotX(position < 0f ? view.getWidth() : 0f);
-        view.setPivotY(view.getHeight() * 0.5f);
-        view.setRotationY(90f * position);
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else if(position <= 0){
+            view.setAlpha(1);
+            view.setPivotX(view.getWidth());
+            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationY(-90f * position);
+        }else{
+            view.setAlpha(1);
+            view.setPivotX(0);
+            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationY(90f * position);
+        }
     }
 
     private void FlipVerticalPageTransformer(View view, float position){
-        final float rotation = -180f * position;
-
-        view.setAlpha(rotation > 90f || rotation < -90f ? 0f : 1f);
-        view.setPivotX(view.getWidth() * 0.5f);
-        view.setPivotY(view.getHeight() * 0.5f);
-        view.setRotationX(rotation);
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else if(position <= 0){
+            view.setAlpha(1);
+            view.setRotationX(-180f * position);
+        }else{
+            view.setAlpha(1);
+            view.setRotationX(180f * position);
+        }
     }
 
     private void FlipHorizontalPageTransformer(View view, float position){
-        final float rotation = 180f * position;
-
-        view.setAlpha(rotation > 90f || rotation < -90f ? 0 : 1);
-        view.setPivotX(view.getWidth() * 0.5f);
-        view.setPivotY(view.getHeight() * 0.5f);
-        view.setRotationY(rotation);
+        if(position < -1 || position > 1){
+            view.setAlpha(0);
+        }else if(position <= 0){
+            view.setAlpha(1);
+            view.setRotationY(-180f * position);
+        }else{
+            view.setAlpha(1);
+            view.setRotationY(180f * position);
+        }
     }
 
-    private void StackPageTransformer(View view, float position){
-        if(0 <= position)
-            view.setTranslationX(-view.getWidth() * position);
-        else
+    private void StackPageTransformer(View view, float position) {
+        if (position < -1 || position > 1) {
+            view.setAlpha(0);
+        } else if (position <= 0) {
+            view.setAlpha(1);
             view.setTranslationX(0);
+        }else{
+            view.setAlpha(1);
+            view.setScaleX(0.5f * (position + 1));
+            view.setScaleY(0.5f * (position + 1));
+            //view.setTranslationX(view.getWidth() * position);
+        }
     }
 
     private void ZoomInPageTransformer(View view, float position){
-        final float scale = position < 0 ? position + 1f : Math.abs(1f - position);
-        view.setScaleX(scale);
-        view.setScaleY(scale);
-        view.setPivotX(view.getWidth() * 0.5f);
-        view.setPivotY(view.getHeight() * 0.5f);
-        if(-1 <= position || 1 >= position)
-            view.setAlpha(1f - (scale - 1f));
-        else
+        if (position < -1 || position > 1) {
             view.setAlpha(0);
+        } else if(position <= 0){
+            view.setAlpha(position + 1f);
+            view.setScaleX(position + 1f);
+            view.setScaleY(position + 1f);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+        }else{
+            view.setAlpha(1f - position);
+            view.setScaleX(1f - position);
+            view.setScaleY(1f - position);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+        }
     }
 
     private void RotateUpPageTransformer(View view, float position){
-        final float ROT_MOD = -15f;
-        final float width = view.getWidth();
-        final float rotation = ROT_MOD * position;
-
-        view.setPivotX(width * 0.5f);
-        view.setPivotY(0f);
-        view.setTranslationX(0f);
-        view.setRotation(rotation);
+        if (position < -1 || position > 1) {
+            view.setAlpha(0);
+        } else if(position <= 0){
+            float height = view.getHeight();
+            view.setAlpha(1);
+            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(0f);
+            view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotation(360f * position);
+        }else{
+            view.setAlpha(1);
+            float height = view.getHeight();
+            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(0f);
+            view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotation(360f * (position - 1));
+        }
     }
 
     private void RotateDownPageTransformer(View view, float position){
-        final float ROT_MOD = -15f;
-        final float width = view.getWidth();
-        final float height = view.getHeight();
-        final float rotation = ROT_MOD * position * -1.25f;
-
-        view.setPivotX(width * 0.5f);
-        view.setPivotY(height);
-        view.setRotation(rotation);
+        if (position < -1 || position > 1) {
+            view.setAlpha(0);
+        } else if(position <= 0){
+            float height = view.getHeight();
+            view.setAlpha(1);
+            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(0f);
+            view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotation(-360f * position);
+        }else{
+            view.setAlpha(1);
+            float height = view.getHeight();
+            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(0f);
+            view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotation(-360f * (position - 1));
+        }
     }
 }
