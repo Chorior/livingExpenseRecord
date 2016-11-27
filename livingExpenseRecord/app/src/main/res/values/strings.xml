@@ -35,17 +35,18 @@
     <string name="animation_dialog_cancel">取消</string>
     <string name="animation_dialog_ok">确认</string>
     <string-array name="translation_effect">
-        <item>Accordion</item>
-        <item>CubeIn</item>
-        <item>CubeOut</item>
-        <item>Depth</item>
-        <item>FlipHorizontal</item>
-        <item>FlipVertical</item>
-        <item>RotateDown</item>
-        <item>RotateUp</item>
-        <item>Stack</item>
-        <item>Tablet</item>
-        <item>ZoomIn</item>
-        <item>ZoomOut</item>
+        <item>推压</item>
+        <item>立方内转</item>
+        <item>立方外转</item>
+        <item>景深</item>
+        <item>水平翻转</item>
+        <item>竖直翻转</item>
+        <item>顺时针旋转</item>
+        <item>逆时针旋转</item>
+        <item>拉进</item>
+        <item>标准</item>
+        <item>方块</item>
+        <item>放大</item>
+        <item>缩小</item>
     </string-array>
 </resources>

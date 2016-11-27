@@ -3,7 +3,6 @@ package org.chorior.pengzhen.livingexpenserecord.custom;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -22,6 +21,7 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
         RotateDown,
         RotateUp,
         Stack,
+        Standard,
         Tablet,
         ZoomIn,
         ZoomOut,
@@ -61,6 +61,9 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             case Stack:
                 StackPageTransformer(view,position);
                 break;
+            case Standard:
+                StandardPageTransformer(view,position);
+                break;
             case Tablet:
                 TabletPageTransformer(view,position);
                 break;
@@ -97,8 +100,14 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             }
 
             // Scale the page down (between MIN_SCALE and 1)
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
+            view.setTranslationY(0);
 
             // Fade the page relative to its size.
             view.setAlpha(MIN_ALPHA +
@@ -124,6 +133,12 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             // Use the default slide transition when moving to the left page
             view.setAlpha(1);
             view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setScaleX(1);
             view.setScaleY(1);
 
@@ -137,6 +152,12 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             // Scale the page down (between MIN_SCALE and 1)
             float scaleFactor = MIN_SCALE
                     + (1 - MIN_SCALE) * (1 - Math.abs(position));
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
 
@@ -151,12 +172,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }else if(position <= 0) {
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(view.getWidth());
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setScaleX(1f + position);
+            view.setScaleY(1);
         }else{
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(0);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setScaleX(1f - position);
+            view.setScaleY(1);
         }
     }
 
@@ -168,7 +203,7 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             final Camera OFFSET_CAMERA = new Camera();
             float[] OFFSET_TEMP_FLOAT = new float[2];
 
-            float degrees = (position < 0 ? 30f : -30f) * Math.abs(position);
+            float degrees = (position <= 0 ? 30f : -30f) * Math.abs(position);
             OFFSET_MATRIX.reset();
             OFFSET_CAMERA.save();
             OFFSET_CAMERA.rotateY(Math.abs(degrees));
@@ -183,10 +218,15 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             float translationX = (view.getWidth() - OFFSET_TEMP_FLOAT[0]) * (degrees > 0.0f ? 1.0f : -1.0f);
 
             view.setAlpha(1);
-            view.setTranslationX(translationX);
             view.setPivotX(view.getWidth() * 0.5f);
-            view.setPivotY(0);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setTranslationX(translationX);
+            view.setTranslationX(0);
+            view.setRotationX(0);
             view.setRotationY(degrees);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }
 
     }
@@ -197,14 +237,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }else if(position <= 0){
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(view.getWidth());
-            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
             view.setRotationY(90f * position);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }else{
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(0);
-            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
             view.setRotationY(-90f * position);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }
     }
 
@@ -213,14 +265,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }else if(position <= 0){
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(view.getWidth());
-            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
             view.setRotationY(-90f * position);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }else{
             view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setPivotX(0);
-            //view.setPivotY(view.getHeight() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
             view.setRotationY(90f * position);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }
     }
 
@@ -229,10 +293,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }else if(position <= 0){
             view.setAlpha(1);
-            view.setRotationX(-180f * position);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setScaleX((float)Math.pow(0.5,2*(-position)));
+            view.setScaleY((float)Math.pow(0.5,2*(-position)));
+            view.setRotationX(-360f * position);
+            view.setRotationY(0);
+            view.setRotation(0);
         }else{
             view.setAlpha(1);
-            view.setRotationX(180f * position);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setScaleX((float)Math.pow(0.5,2*position));
+            view.setScaleY((float)Math.pow(0.5,2*position));
+            view.setRotationX(360f * position);
+            view.setRotationY(0);
+            view.setRotation(0);
         }
     }
 
@@ -241,10 +321,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }else if(position <= 0){
             view.setAlpha(1);
-            view.setRotationY(-180f * position);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setScaleX((float)Math.pow(0.5,2*(-position)));
+            view.setScaleY((float)Math.pow(0.5,2*(-position)));
+            view.setRotationX(0);
+            view.setRotationY(-360f * position);
+            view.setRotation(0);
         }else{
             view.setAlpha(1);
-            view.setRotationY(180f * position);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setScaleX((float)Math.pow(0.5,2*position));
+            view.setScaleY((float)Math.pow(0.5,2*position));
+            view.setRotationX(0);
+            view.setRotationY(360f * position);
+            view.setRotation(0);
         }
     }
 
@@ -253,12 +349,28 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         } else if (position <= 0) {
             view.setAlpha(1);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
             view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }else{
             view.setAlpha(1);
-            view.setScaleX(0.5f * (position + 1));
-            view.setScaleY(0.5f * (position + 1));
-            //view.setTranslationX(view.getWidth() * position);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getHeight() * 0.5f);
+            view.setScaleX(0.5f * (2 - position));
+            view.setScaleY(0.5f * (2 - position));
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
+            view.setTranslationX(view.getWidth() * position);
+            view.setTranslationY(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }
     }
 
@@ -267,16 +379,26 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
         } else if(position <= 0){
             view.setAlpha(position + 1f);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setScaleX(position + 1f);
             view.setScaleY(position + 1f);
             view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
         }else{
             view.setAlpha(1f - position);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
             view.setScaleX(1f - position);
             view.setScaleY(1f - position);
             view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(view.getHeight() * 0.5f);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
         }
     }
 
@@ -286,17 +408,27 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
         } else if(position <= 0){
             float height = view.getHeight();
             view.setAlpha(1);
-            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(0f);
+            view.setTranslationX(0);
             view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotationX(0);
+            view.setRotationY(0);
             view.setRotation(360f * position);
+            view.setScaleX((float)Math.pow(0.5,2*(-position)));
+            view.setScaleY((float)Math.pow(0.5,2*(-position)));
         }else{
             view.setAlpha(1);
             float height = view.getHeight();
-            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(0f);
+            view.setTranslationX(0);
             view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotationX(0);
+            view.setRotationY(0);
             view.setRotation(360f * (position - 1));
+            view.setScaleX((float)Math.pow(0.5,2*position));
+            view.setScaleY((float)Math.pow(0.5,2*position));
         }
     }
 
@@ -306,17 +438,44 @@ public class MyPageTransformer implements ViewPager.PageTransformer {
         } else if(position <= 0){
             float height = view.getHeight();
             view.setAlpha(1);
-            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(0f);
+            view.setTranslationX(0);
             view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotationX(0);
+            view.setRotationY(0);
             view.setRotation(-360f * position);
+            view.setScaleX((float)Math.pow(0.5,2*(-position)));
+            view.setScaleY((float)Math.pow(0.5,2*(-position)));
         }else{
             view.setAlpha(1);
             float height = view.getHeight();
-            //view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotX(view.getWidth() * 0.5f);
             view.setPivotY(0f);
+            view.setTranslationX(0);
             view.setTranslationY(-(float)(height*(1 - Math.cos(-15f * position * Math.PI/180f))));
+            view.setRotationX(0);
+            view.setRotationY(0);
             view.setRotation(-360f * (position - 1));
+            view.setScaleX((float)Math.pow(0.5,2*position));
+            view.setScaleY((float)Math.pow(0.5,2*position));
+        }
+    }
+
+    private void StandardPageTransformer(View view, float position){
+        if (position < -1 || position > 1) {
+            view.setAlpha(0);
+        }else{
+            view.setAlpha(1);
+            view.setPivotX(view.getWidth() * 0.5f);
+            view.setPivotY(view.getWidth() * 0.5f);
+            view.setTranslationX(0);
+            view.setTranslationY(0);
+            view.setRotationX(0);
+            view.setRotationY(0);
+            view.setRotation(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
         }
     }
 }
