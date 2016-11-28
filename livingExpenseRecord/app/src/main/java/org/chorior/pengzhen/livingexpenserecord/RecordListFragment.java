@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -130,6 +131,9 @@ public class RecordListFragment extends ListFragment {
 
         Intent i = new Intent(getActivity(),finalRecordActivity.class);
         i.putExtra(finalRecordFragment.EXTRA_RECORD_DATE,record.getmDate());
+        i.putExtra(finalRecordActivity.EXTRA_ANOMATION,
+                ((RecordActivity)getActivity()).getmNaviSelection().getAnimation()
+        );
         startActivity(i);
     }
 

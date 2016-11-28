@@ -23,6 +23,8 @@ import java.util.Date;
 
 public class finalRecordActivity extends AppCompatActivity {
     private ArrayList<Record> mRecords;
+    public static final String EXTRA_ANOMATION =
+            "org.chorior.pengzhen.animationIntent.index";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class finalRecordActivity extends AppCompatActivity {
     }
 
     public void initToolbar(){
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_final);
         mToolbar.setElevation(0);
         setSupportActionBar(mToolbar);
         if(null != getSupportActionBar()){
@@ -59,7 +61,9 @@ public class finalRecordActivity extends AppCompatActivity {
         mRecords = RecordLab.get(this).getRecords();
         FragmentManager fm = getSupportFragmentManager();
         ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPagerFinal);
-        mViewPager.setPageTransformer(true, new MyPageTransformer(MyPageTransformer.TransitionEffect.ZoomOut));
+        mViewPager.setPageTransformer(true, new MyPageTransformer(MyPageTransformer.TransitionEffect.values()[
+                getIntent().getIntExtra(EXTRA_ANOMATION,0)
+        ]));
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {

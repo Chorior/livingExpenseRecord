@@ -223,4 +223,8 @@ public class RecordActivity extends AppCompatActivity {
                         MyPageTransformer.TransitionEffect.values()[mNaviSelection.getAnimation()]
                 ));
     }
+
+    public NaviSelection getmNaviSelection() {
+        return mNaviSelection;
+    }
 }
