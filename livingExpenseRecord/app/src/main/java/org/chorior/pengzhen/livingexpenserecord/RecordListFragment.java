@@ -1,12 +1,11 @@
 package org.chorior.pengzhen.livingexpenserecord;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,35 +15,53 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.daimajia.swipe.SimpleSwipeListener;
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+import com.daimajia.swipe.util.Attributes;
 
 /**
  * Created by pengzhen on 13/10/16.
  */
 
 public class RecordListFragment extends ListFragment {
-    private RecordAdapter adapter;
+    private ListViewAdapter adapter;
 
-    private class RecordAdapter extends ArrayAdapter<Record>{
-        public RecordAdapter(ArrayList<Record> records){
-            super(getActivity(),0,records);
+    public class ListViewAdapter extends BaseSwipeAdapter {
+
+        private Context mContext;
+
+        public ListViewAdapter(Context mContext) {
+            this.mContext = mContext;
         }
 
-        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // if we weren't given a view, inflate one
-            if(null == convertView){
-                convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_record, null);
-            }
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.swipe;
+        }
 
-            // configure the view for this record
+        @Override
+        public View generateView(final int position, ViewGroup parent) {
+            View v = LayoutInflater.from(mContext).inflate(R.layout.list_item_record, null);
+            v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RecordLab.get(getActivity()).getRecords().remove(position);
+                    refreshData();
+                    RecordLab.get(getActivity()).updateRecords();
+                    Toast.makeText(getActivity(), "已删除", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return v;
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
             Record record = getItem(position);
 
             TextView dateTextView =
@@ -54,8 +71,21 @@ public class RecordListFragment extends ListFragment {
             TextView totalTodayTextView =
                     (TextView)convertView.findViewById(R.id.record_list_item_totalTodayTextView);
             totalTodayTextView.setText(String.valueOf(record.getmTotal_today()));
+        }
 
-            return convertView;
+        @Override
+        public int getCount() {
+            return RecordLab.get(getActivity()).getRecords().size();
+        }
+
+        @Override
+        public Record getItem(int position) {
+            return RecordLab.get(getActivity()).getRecords().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
         }
     }
 
@@ -63,9 +93,9 @@ public class RecordListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<Record> mRecords = RecordLab.get(getActivity()).getRecords();
-        adapter = new RecordAdapter(mRecords);
+        adapter = new ListViewAdapter(getActivity());
         setListAdapter(adapter);
+        adapter.setMode(Attributes.Mode.Single);
     }
 
     @Override
@@ -127,7 +157,7 @@ public class RecordListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Record record = ((RecordAdapter)getListAdapter()).getItem(position);
+        Record record = adapter.getItem(position);
 
         Intent i = new Intent(getActivity(),finalRecordActivity.class);
         i.putExtra(finalRecordFragment.EXTRA_RECORD_DATE,record.getmDate());
